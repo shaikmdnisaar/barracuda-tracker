@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎯 Barracuda Crack Tracker</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --card-hover: #334155;
+    --accent: #06b6d4;
+    --accent2: #8b5cf6;
+    --green: #22c55e;
+    --yellow: #eab308;
+    --red: #ef4444;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+  header h1 {
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  header p { color: var(--muted); font-size: 1rem; }
+
+  /* Overall Progress */
+  .overall {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+  }
+  .overall-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .overall-header h2 { font-size: 1.3rem; }
+  .overall-stats { display: flex; gap: 20px; font-size: 0.95rem; color: var(--muted); }
+  .overall-stats strong { color: var(--text); }
+  .progress-bar {
+    height: 24px;
+    background: #0f172a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 12px;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    min-width: 40px;
+  }
+
+  /* Phase */
+  .phase {
+    margin-bottom: 28px;
+  }
+  .phase-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+  .phase-badge {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .badge-must { background: rgba(239,68,68,0.2); color: var(--red); border: 1px solid var(--red); }
+  .badge-should { background: rgba(234,179,8,0.2); color: var(--yellow); border: 1px solid var(--yellow); }
+  .badge-nice { background: rgba(34,197,94,0.2); color: var(--green); border: 1px solid var(--green); }
+
+  /* Course Card */
+  .course {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+  .course:hover { border-color: var(--accent); }
+  .course.done { border-color: var(--green); background: rgba(34,197,94,0.05); }
+  .course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .course-name { font-size: 1.1rem; font-weight: 600; }
+  .course-name .why { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 400; margin-top: 4px; }
+  .course-meta { text-align: right; font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
+  .course-meta .pct { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .course.done .course-meta .pct { color: var(--green); }
+
+  .course-bar {
+    height: 8px;
+    background: #0f172a;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .course-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .course.done .course-bar-fill { background: var(--green); }
+
+  /* Lessons */
+  .lessons {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .lessons.open { display: flex; }
+  .lesson {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #0f172a;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .lesson:hover { border-color: var(--accent); background: var(--card-hover); }
+  .lesson input[type="checkbox"] { accent-color: var(--green); cursor: pointer; }
+  .lesson.checked { background: rgba(34,197,94,0.15); border-color: var(--green); }
+  .lesson.checked label { text-decoration: line-through; color: var(--muted); }
+  .lesson label { cursor: pointer; }
+  .lesson-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .lesson-link:hover { color: #fff; text-decoration: underline; }
+  .lesson.checked .lesson-link { color: var(--green); }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { border-color: var(--accent); background: var(--card-hover); }
+  .btn-danger:hover { border-color: var(--red); color: var(--red); }
+
+  /* Milestone */
+  .milestone {
+    text-align: center;
+    padding: 16px;
+    border-radius: 12px;
+    margin: 20px 0;
+    font-weight: 600;
+    display: none;
+  }
+  .milestone.show { display: block; }
+  .milestone.apply { background: rgba(34,197,94,0.15); border: 1px solid var(--green); color: var(--green); }
+  .milestone.interview { background: rgba(139,92,246,0.15); border: 1px solid var(--accent2); color: var(--accent2); }
+  .milestone.full { background: rgba(6,182,212,0.15); border: 1px solid var(--accent); color: var(--accent); }
+
+  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 30px; padding: 20px; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.5rem; }
+    .course-header { flex-direction: column; }
+    .course-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>🎯 Barracuda Crack Tracker</h1>
+    <p>Track your NHPREP courses → become eligible → crack the interview</p>
+  </header>
+
+  <!-- Overall Progress -->
+  <div class="overall">
+    <div class="overall-header">
+      <h2>📊 Overall Progress</h2>
+      <div class="overall-stats">
+        <span>Lessons: <strong id="totalDone">0</strong>/<strong id="totalAll">0</strong></span>
+        <span>Courses done: <strong id="coursesDone">0</strong>/<strong id="coursesAll">0</strong></span>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="overallFill" style="width:40px">0%</div>
+    </div>
+  </div>
+
+  <!-- Milestones -->
+  <div class="milestone apply" id="milestoneApply">⭐ Phase 1 complete — You are now ELIGIBLE to apply to Barracuda! Go apply today.</div>
+  <div class="milestone interview" id="milestoneInterview">🔥 Phase 2 complete — You are interview-ready! Revise notes & practice quizzes.</div>
+  <div class="milestone full" id="milestoneFull">🎉 All done — Fully prepared for the final round. Go get that offer!</div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn" onclick="toggleAllLessons()">👁️ Expand/Collapse All</button>
+    <button class="btn btn-danger" onclick="resetProgress()">🗑️ Reset All Progress</button>
+  </div>
+
+  <!-- Phases will be injected here -->
+  <div id="phases"></div>
+
+  <footer>
+    Progress auto-saved in your browser. • Built for your Barracuda prep journey
+  </footer>
+</div>
+
+<script>
+const COURSES = [
+  // PHASE 1 — Mandatory
+  { phase: 1, name: "CCNP Switching", lessons: 15, why: "Completes 'CCNP routing & switching' — HR mandatory", badge: "must", url: "https://nhprep.com/course/ccnp-switching",
+    lessonUrls: [
+      "https://nhprep.com/course/ccnp-switching/lesson/day-01-introduction-to-switchingmp4",
+      "https://nhprep.com/course/ccnp-switching/lesson/day-02-layer-2-forwarding-vlan-basicsmp4",
+      null,null,null,null,null,null,null,null,null,null,null,null,null
+    ]},
+  { phase: 1, name: "CCNP Security WSA - Mohnish", lessons: 9, why: "WSA requirement — HR mandatory", badge: "must", url: "https://nhprep.com/course/ccnp-security-wsa-mohnish",
+    lessonUrls: [
+      null,null,null,null,null,null,
+      "https://nhprep.com/course/ccnp-security-wsa-mohnish/lesson/wsa-day-7mp4",
+      null,
+      "https://nhprep.com/course/ccnp-security-wsa-mohnish/lesson/wsa-day-9mp4"
+    ]},
+  { phase: 1, name: "Linux Fundamentals", lessons: 18, why: "Linux requirement — HR mandatory", badge: "must", url: "https://nhprep.com/course/linux",
+    lessonUrls: [
+      null,
+      "https://nhprep.com/course/linux/lesson/2directory-strucure-basic-commands-lsmp4",
+      "https://nhprep.com/course/linux/lesson/3-4directory-managemet-commands-wild-card-optionsmp4",
+      null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+    ]},
+  // PHASE 2 — Interview-critical
+  { phase: 2, name: "Lab 72: Network Troubleshooting Methodology", lessons: 5, why: "Role = troubleshooting customer issues. Shortest, highest ROI.", badge: "should", url: "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology",
+    lessonUrls: [
+      "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/tshoot-approaches",
+      "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/layer-1-2-tshoot",
+      "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/layer-3-tshoot",
+      "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/end-to-end",
+      "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/multi-layer-challenge"
+    ]},
+  { phase: 2, name: "ASA BY Mr.SUSHIL", lessons: 19, why: "Cisco ASA firewall — strengthens firewall + security depth", badge: "should", url: "https://nhprep.com/course/asa-by-mrsushil",
+    lessonUrls: [
+      null,
+      "https://nhprep.com/course/asa-by-mrsushil/lesson/day-01-asa-l-mp4",
+      "https://nhprep.com/course/asa-by-mrsushil/lesson/0204-6mp4",
+      null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+    ]},
+  { phase: 2, name: "BUG BOUNTY HUNTING", lessons: 28, why: "Web App Security / OWASP Top 10 — Barracuda WAF role", badge: "should", url: "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj",
+    lessonUrls: [
+      "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj/lesson/day-01-bug-bounty-hunting-fundamental-concepts-and-course-modules-overviewmp4",
+      "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj/lesson/day-02-bug-bounty-plateform-with-bug-bounty-hunter-need-to-know-conceptsmp4",
+      null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+    ]},
+  { phase: 2, name: "IPSEC", lessons: 7, why: "VPN/IPsec fundamentals — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ipsec",
+    lessonUrls: [
+      "https://nhprep.com/course/ipsec/lesson/1mp4",
+      "https://nhprep.com/course/ipsec/lesson/2mp4",
+      null,null,null,null,null
+    ]},
+  { phase: 2, name: "NGIPS", lessons: 9, why: "Next-Gen IPS — Barracuda security products use IPS", badge: "should", url: "https://nhprep.com/course/ngips",
+    lessonUrls: [
+      "https://nhprep.com/course/ngips/lesson/day_01_ngipsmp4",
+      "https://nhprep.com/course/ngips/lesson/day_02_ngipsmp4",
+      null,null,null,null,null,null,null
+    ]},
+  { phase: 2, name: "Cisco ESA - Email Security appliance", lessons: 5, why: "Reinforces ESA — Barracuda = Email Security", badge: "should", url: "https://nhprep.com/course/cisco-esa-email-security-applaince",
+    lessonUrls: [
+      "https://nhprep.com/course/cisco-esa-email-security-applaince/lesson/1-introduction-history-specificationmp4",
+      "https://nhprep.com/course/cisco-esa-email-security-applaince/lesson/2-email-authentication-overview-dmarkspfdkimmp4",
+      null,null,null
+    ]},
+  // PHASE 3 — Bonus
+  { phase: 3, name: "Palo Alto Firewall (Sushil)", lessons: 20, why: "Second firewall vendor — multi-vendor environments", badge: "nice", url: "https://nhprep.com/course/palo-alto-by-sushil",
+    lessonUrls: [
+      "https://nhprep.com/course/palo-alto-by-sushil/lesson/video1000780102mp4",
+      null,null,null,null,null,null,null,null,null,
+      "https://nhprep.com/course/palo-alto-by-sushil/lesson/video1064592854mp4",
+      null,null,null,null,null,null,null,null
+    ]},
+  { phase: 3, name: "OSI & ARP", lessons: 12, why: "TCP/IP, UDP fundamentals — required skill", badge: "nice", url: "https://nhprep.com/course/osi-arp",
+    lessonUrls: [
+      "https://nhprep.com/course/osi-arp/lesson/day_1_osi-part-1mp4",
+      "https://nhprep.com/course/osi-arp/lesson/day_2_osi-part-2mp4",
+      null,null,null,null,null,null,null,null,null,null
+    ]},
+];
+
+const PHASE_INFO = {
+  1: { title: "Phase 1 — Become Eligible to Apply", label: "MUST DO", badge: "badge-must" },
+  2: { title: "Phase 2 — Crack the Interview", label: "SHOULD DO", badge: "badge-should" },
+  3: { title: "Phase 3 — Bonus / Final Round", label: "NICE TO HAVE", badge: "badge-nice" },
+};
+
+const STORAGE_KEY = "barracuda_tracker_v1";
+
+// ---- Load / Save ----
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch { return {}; }
+}
+function saveProgress(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+let progress = loadProgress();
+
+// ---- Render ----
+function render() {
+  const phasesDiv = document.getElementById("phases");
+  phasesDiv.innerHTML = "";
+  let totalDone = 0, totalAll = 0, coursesDone = 0;
+
+  [1, 2, 3].forEach(phaseNum => {
+    const info = PHASE_INFO[phaseNum];
+    const phaseCourses = COURSES.filter(c => c.phase === phaseNum);
+    const phaseDiv = document.createElement("div");
+    phaseDiv.className = "phase";
+    phaseDiv.innerHTML = `
+      <div class="phase-title">
+        ${info.title}
+        <span class="phase-badge ${info.badge}">${info.label}</span>
+      </div>
+    `;
+
+    phaseCourses.forEach((course, idx) => {
+      const cKey = course.name;
+      const done = progress[cKey] || 0;
+      const allDone = done >= course.lessons;
+      if (allDone) coursesDone++;
+      totalDone += done;
+      totalAll += course.lessons;
+      const pct = Math.round((done / course.lessons) * 100);
+
+      const card = document.createElement("div");
+      card.className = "course" + (allDone ? " done" : "");
+      card.dataset.course = cKey;
+
+      let lessonsHTML = "";
+      for (let i = 1; i <= course.lessons; i++) {
+        const checked = i <= done ? "checked" : "";
+        const lessonUrl = (course.lessonUrls && course.lessonUrls[i - 1]) ? course.lessonUrls[i - 1] : course.url;
+        lessonsHTML += `
+          <div class="lesson ${checked}" data-lesson="${i}">
+            <input type="checkbox" id="${cKey}-${i}" ${checked} onchange="toggleLesson('${cKey}', ${i}, ${course.lessons})">
+            <a href="${lessonUrl}" target="_blank" class="lesson-link" title="Open lesson ${i} video">L${i} ▶</a>
+          </div>`;
+      }
+
+      card.innerHTML = `
+        <div class="course-header" onclick="toggleLessons('${cKey}')">
+          <div class="course-name">
+            ${course.name}
+            <span class="why">📌 ${course.why}</span>
+          </div>
+          <div class="course-meta">
+            <a href="${course.url}" target="_blank" style="color:var(--accent);text-decoration:none;font-size:0.8rem;">Open course ↗</a><br>
+            <span class="pct">${pct}%</span><br>
+            <span>${done}/${course.lessons} lessons</span>
+          </div>
+        </div>
+        <div class="course-bar"><div class="course-bar-fill" style="width:${pct}%"></div></div>
+        <div class="lessons" id="lessons-${cKey}">${lessonsHTML}</div>
+      `;
+      phaseDiv.appendChild(card);
+    });
+    phasesDiv.appendChild(phaseDiv);
+  });
+
+  // Overall stats
+  document.getElementById("totalDone").textContent = totalDone;
+  document.getElementById("totalAll").textContent = totalAll;
+  document.getElementById("coursesDone").textContent = coursesDone;
+  document.getElementById("coursesAll").textContent = COURSES.length;
+  const overallPct = Math.round((totalDone / totalAll) * 100);
+  const fill = document.getElementById("overallFill");
+  fill.style.width = Math.max(40, overallPct) + "%";
+  fill.textContent = overallPct + "%";
+
+  // Milestones
+  const phase1Done = COURSES.filter(c => c.phase === 1).every(c => (progress[c.name] || 0) >= c.lessons);
+  const phase2Done = COURSES.filter(c => c.phase === 2).every(c => (progress[c.name] || 0) >= c.lessons);
+  const allDone = COURSES.every(c => (progress[c.name] || 0) >= c.lessons);
+  document.getElementById("milestoneApply").classList.toggle("show", phase1Done && !allDone);
+  document.getElementById("milestoneInterview").classList.toggle("show", phase2Done && !allDone);
+  document.getElementById("milestoneFull").classList.toggle("show", allDone);
+}
+
+// ---- Interactions ----
+function toggleLesson(courseName, lessonNum, totalLessons) {
+  const current = progress[courseName] || 0;
+  if (lessonNum <= current) {
+    // uncheck this and all after
+    progress[courseName] = lessonNum - 1;
+  } else {
+    // check up to this
+    progress[courseName] = lessonNum;
+  }
+  saveProgress(progress);
+  render();
+}
+
+function toggleLessons(courseName) {
+  const el = document.getElementById("lessons-" + courseName);
+  el.classList.toggle("open");
+}
+
+let allOpen = false;
+function toggleAllLessons() {
+  allOpen = !allOpen;
+  document.querySelectorAll(".lessons").forEach(el => {
+    el.classList.toggle("open", allOpen);
+  });
+}
+
+function resetProgress() {
+  if (confirm("Reset ALL progress? This cannot be undone.")) {
+    progress = {};
+    saveProgress(progress);
+    render();
+  }
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
