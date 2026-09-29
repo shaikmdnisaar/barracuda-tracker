@@ -447,7 +447,7 @@ function render() {
 
   [1, 2, 3, 4].forEach(phaseNum => {
     const info = PHASE_INFO[phaseNum];
-    const phaseCourses = COURSES.filter(c => c.phase === phaseNum);
+    const phaseCourses = COURSES.filter(c => c.phase === phaseNum).sort((a, b) => b.weight - a.weight);
     const phaseDiv = document.createElement("div");
     phaseDiv.className = "phase";
     phaseDiv.innerHTML = `
