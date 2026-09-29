@@ -336,7 +336,7 @@
 <section class="hero" id="hero">
   <div class="eyebrow">Job Readiness Dashboard</div>
   <h1>Crack the <span class="accent">Barracuda</span> Technical Solutions Engineer role</h1>
-  <p>43 courses · 424 lessons · 5 phases · Weighted by official JD requirements</p>
+  <p>61 courses · 600+ lessons · 6 phases · Weighted by official JD requirements</p>
 </section>
 
 <!-- Stats Row -->
@@ -554,6 +554,53 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null]},
   { phase: 5, name: "AI-Powered Network Security", lessons: 10, why: "Barracuda uses AI in cybersecurity — 'AI in Cybersecurity' is a Barracuda product line", badge: "should", url: "https://nhprep.com/course/ai-powered-network-security", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
+  // PHASE 6 — CCNA Courses & Labs (networking foundation)
+  { phase: 6, name: "CCNA Complete Course", lessons: 25, why: "CCNA certification — JD: 'CCNA or CCNP preferred'. Already 100% done.", badge: "must", url: "https://nhprep.com/course/ccna-by-mrajay", weight: 8, completed: true,
+    labs: ["Lab 61: IOS Navigation|/course/ccna-lab-11-ios-navigation","Lab 62: Router & Switch Initial Config|/course/ccna-lab-12-initial-config","Lab 63: Device Management & Monitoring|/course/ccna-lab-13-device-management","Lab 64: IPv4 Subnetting|/course/ccna-lab-14-subnetting","Lab 66: EIGRP Configuration|/course/ccna-lab-16-eigrp","Lab 68: HSRP — Gateway Redundancy|/course/ccna-lab-18-hsrp","Lab 69: Standard ACLs|/course/ccna-lab-19-standard-acls","Lab 74: Network Automation Basics|/course/ccna-lab-24-automation-basics","Lab 75: Wireless Configuration|/course/ccna-lab-25-wireless"],
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 6, name: "CCNA (Amit)", lessons: 32, why: "Alternative CCNA course — 32 lessons, deeper coverage", badge: "should", url: "https://nhprep.com/course/ccna-by-amit", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 6, name: "CCNA (Sharath)", lessons: 25, why: "Alternative CCNA course — different instructor perspective", badge: "should", url: "https://nhprep.com/course/ccna-sharath", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 6, name: "CCNA BHARATH", lessons: 30, why: "Alternative CCNA course — 30 lessons", badge: "should", url: "https://nhprep.com/course/ccna-bharath", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 6, name: "CCNA Course (Tamil)", lessons: 19, why: "CCNA in Tamil — if you prefer Tamil instruction", badge: "nice", url: "https://nhprep.com/course/tamil-ccna", weight: 1, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 6, name: "Vishal CCNA CD", lessons: 12, why: "CCNA complementary course — 12 lessons", badge: "nice", url: "https://nhprep.com/course/vishal-ccna-cd", weight: 1, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null]},
+  // CCNA Labs (standalone)
+  { phase: 6, name: "Lab 1: VLANs & Trunking", lessons: 6, why: "CCNA lab — VLANs, access ports, 802.1Q trunks", badge: "should", url: "https://nhprep.com/course/ccna-lab-01-vlans-and-trunking", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 6, name: "Lab 2: Inter-VLAN Routing", lessons: 5, why: "CCNA lab — Router-on-a-stick, SVIs, Layer 3 switching", badge: "should", url: "https://nhprep.com/course/ccna-lab-02-inter-vlan-routing", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 3: EtherChannel & Spanning Tree", lessons: 6, why: "CCNA lab — LACP, PAgP, RSTP, PortFast, BPDU Guard", badge: "should", url: "https://nhprep.com/course/ccna-lab-03-etherchannel-and-stp", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 6, name: "Lab 5: OSPF Single Area", lessons: 6, why: "CCNA lab — OSPFv2 single area, DR/BDR, cost, neighbor states", badge: "should", url: "https://nhprep.com/course/ccna-lab-05-ospf-single-area", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 6, name: "Lab 6: Multi-Area OSPF", lessons: 6, why: "CCNA lab — Multi-area OSPF, ABR, summarization, stub areas", badge: "should", url: "https://nhprep.com/course/ccna-lab-06-multi-area-ospf", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 6, name: "Lab 7: DHCP, NAT & PAT", lessons: 6, why: "CCNA lab — DHCP server/relay, static NAT, dynamic NAT, PAT", badge: "should", url: "https://nhprep.com/course/ccna-lab-07-dhcp-nat-pat", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 6, name: "Lab 9: IPv6 Fundamentals", lessons: 5, why: "CCNA lab — IPv6 addressing, SLAAC, OSPFv3, dual-stack", badge: "should", url: "https://nhprep.com/course/ccna-lab-09-ipv6", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 10: FHRP & Network Services", lessons: 6, why: "CCNA lab — HSRP, VRRP, NTP, DHCP snooping, IP SLA", badge: "should", url: "https://nhprep.com/course/ccna-lab-10-fhrp-and-services", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 6, name: "Lab 61: IOS Navigation & Basic Commands", lessons: 5, why: "CCNA lab — IOS navigation basics for beginners", badge: "should", url: "https://nhprep.com/course/ccna-lab-11-ios-navigation", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 62: Router & Switch Initial Configuration", lessons: 5, why: "CCNA lab — initial router/switch setup", badge: "should", url: "https://nhprep.com/course/ccna-lab-12-initial-config", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 63: Device Management & Monitoring", lessons: 5, why: "CCNA lab — device management, monitoring tools", badge: "should", url: "https://nhprep.com/course/ccna-lab-13-device-management", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 66: EIGRP Configuration", lessons: 5, why: "CCNA lab — EIGRP basic configuration", badge: "should", url: "https://nhprep.com/course/ccna-lab-16-eigrp", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 68: HSRP — Gateway Redundancy", lessons: 5, why: "CCNA lab — HSRP first-hop redundancy", badge: "should", url: "https://nhprep.com/course/ccna-lab-18-hsrp", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 69: Standard Access Control Lists", lessons: 5, why: "CCNA lab — standard ACLs for traffic filtering", badge: "should", url: "https://nhprep.com/course/ccna-lab-19-standard-acls", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 74: Network Automation Basics", lessons: 5, why: "CCNA lab — automation fundamentals for networks", badge: "should", url: "https://nhprep.com/course/ccna-lab-24-automation-basics", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "Lab 75: Wireless Configuration Basics", lessons: 5, why: "CCNA lab — wireless configuration fundamentals", badge: "nice", url: "https://nhprep.com/course/ccna-lab-25-wireless", weight: 1, completed: false,
+    lessonUrls: [null,null,null,null,null]},
 ];
 
 const PHASE_INFO = {
@@ -562,6 +609,7 @@ const PHASE_INFO = {
   3: { title: "Phase 3 — Bonus / Final Round", label: "NICE TO HAVE", badge: "badge-nice" },
   4: { title: "Phase 4 — Hands-On Labs & Security Depth", label: "NEW & RELEVANT", badge: "badge-should" },
   5: { title: "Phase 5 — JD Gap Fillers (from Official TSE-2 JD)", label: "JD REQUIREMENTS", badge: "badge-must" },
+  6: { title: "Phase 6 — CCNA Courses & Labs", label: "CCNA FOUNDATION", badge: "badge-should" },
 };
 
 const STORAGE_KEY = "barracuda_tracker_v1";
@@ -582,7 +630,7 @@ function render() {
   phasesDiv.innerHTML = "";
   let totalDone = 0, totalAll = 0, coursesDone = 0;
 
-  [1, 2, 3, 4, 5].forEach(phaseNum => {
+  [1, 2, 3, 4, 5, 6].forEach(phaseNum => {
     const info = PHASE_INFO[phaseNum];
     const phaseCourses = COURSES.filter(c => c.phase === phaseNum).sort((a, b) => b.weight - a.weight);
     const phaseDiv = document.createElement("div");
@@ -816,7 +864,7 @@ function buildSectionRail() {
   ];
 
   // Add phase sections
-  [1, 2, 3, 4, 5].forEach(phaseNum => {
+  [1, 2, 3, 4, 5, 6].forEach(phaseNum => {
     const info = PHASE_INFO[phaseNum];
     if (info) {
       sections.push({ id: `phase-${phaseNum}`, label: info.label });
@@ -850,7 +898,7 @@ function updateScrollSpy() {
   if (railItems.length === 0) return;
 
   // Find which section is currently in view
-  const sections = ["hero", "stats-row", "readiness", "phase-1", "phase-2", "phase-3", "phase-4", "phase-5"];
+  const sections = ["hero", "stats-row", "readiness", "phase-1", "phase-2", "phase-3", "phase-4", "phase-5", "phase-6"];
   let activeSection = sections[0];
   const scrollPos = window.scrollY + window.innerHeight / 3;
 
