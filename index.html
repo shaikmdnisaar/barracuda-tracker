@@ -256,6 +256,26 @@
     </div>
   </div>
 
+  <!-- Job Readiness Score -->
+  <div class="overall" style="border-color: var(--accent2);">
+    <div class="overall-header">
+      <h2>🎯 Job Readiness Score</h2>
+      <div class="overall-stats">
+        <span>Eligible to apply: <strong id="eligibleStatus" style="color:var(--red);">NO</strong></span>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:14px;">
+      <div style="font-size:2.5rem; font-weight:800; background:linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;" id="readinessPct">0%</div>
+      <div style="flex:1;">
+        <div class="progress-bar" style="height:20px;">
+          <div class="progress-fill" id="readinessFill" style="width:40px; background:linear-gradient(90deg, var(--red), var(--yellow), var(--green));">0%</div>
+        </div>
+      </div>
+    </div>
+    <div id="readinessBreakdown" style="font-size:0.85rem; color:var(--muted); line-height:1.8;"></div>
+    <div id="readinessVerdict" style="margin-top:12px; padding:10px 14px; border-radius:8px; font-size:0.9rem; font-weight:600; background:rgba(239,68,68,0.15); border:1px solid var(--red); color:var(--red);"></div>
+  </div>
+
   <!-- Milestones -->
   <div class="milestone apply" id="milestoneApply">⭐ Phase 1 complete — You are now ELIGIBLE to apply to Barracuda! Go apply today.</div>
   <div class="milestone interview" id="milestoneInterview">🔥 Phase 2 complete — You are interview-ready! Revise notes & practice quizzes.</div>
@@ -278,27 +298,27 @@
 <script>
 const COURSES = [
   // PHASE 1 — Mandatory
-  { phase: 1, name: "CCNP Routing (Nikunj)", lessons: 23, why: "CCNP Routing — HR mandatory (already 100% done, videos for reference)", badge: "must", url: "https://nhprep.com/course/ccnp-routing-by-nikunj",
+  { phase: 1, name: "CCNP Routing (Nikunj)", lessons: 23, why: "CCNP Routing — HR mandatory (already 100% done, videos for reference)", badge: "must", url: "https://nhprep.com/course/ccnp-routing-by-nikunj", weight: 12, completed: true,
     lessonUrls: [
       null,
       "https://nhprep.com/course/ccnp-routing-by-nikunj/lesson/day-01-ccnp-course-and-exam-book-discussion-with-routing-module-topics-and-knowledge-checkmp4",
       "https://nhprep.com/course/ccnp-routing-by-nikunj/lesson/day-02-static-routing-with-next-hop-exit-interface-fully-specified-and-recusive-methodsmp4",
       null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
-  { phase: 1, name: "CCNP Switching", lessons: 15, why: "Completes 'CCNP routing & switching' — HR mandatory", badge: "must", url: "https://nhprep.com/course/ccnp-switching",
+  { phase: 1, name: "CCNP Switching", lessons: 15, why: "Completes 'CCNP routing & switching' — HR mandatory", badge: "must", url: "https://nhprep.com/course/ccnp-switching", weight: 12, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/ccnp-switching/lesson/day-01-introduction-to-switchingmp4",
       "https://nhprep.com/course/ccnp-switching/lesson/day-02-layer-2-forwarding-vlan-basicsmp4",
       null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
-  { phase: 1, name: "CCNP Security WSA - Mohnish", lessons: 9, why: "WSA requirement — HR mandatory", badge: "must", url: "https://nhprep.com/course/ccnp-security-wsa-mohnish",
+  { phase: 1, name: "CCNP Security WSA - Mohnish", lessons: 9, why: "WSA requirement — HR mandatory", badge: "must", url: "https://nhprep.com/course/ccnp-security-wsa-mohnish", weight: 10, completed: false,
     lessonUrls: [
       null,null,null,null,null,null,
       "https://nhprep.com/course/ccnp-security-wsa-mohnish/lesson/wsa-day-7mp4",
       null,
       "https://nhprep.com/course/ccnp-security-wsa-mohnish/lesson/wsa-day-9mp4"
     ]},
-  { phase: 1, name: "Linux Fundamentals", lessons: 18, why: "Linux requirement — HR mandatory", badge: "must", url: "https://nhprep.com/course/linux",
+  { phase: 1, name: "Linux Fundamentals", lessons: 18, why: "Linux requirement — HR mandatory", badge: "must", url: "https://nhprep.com/course/linux", weight: 10, completed: false,
     lessonUrls: [
       null,
       "https://nhprep.com/course/linux/lesson/2directory-strucure-basic-commands-lsmp4",
@@ -306,7 +326,7 @@ const COURSES = [
       null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
   // PHASE 2 — Interview-critical
-  { phase: 2, name: "Lab 72: Network Troubleshooting Methodology", lessons: 5, why: "Role = troubleshooting customer issues. Shortest, highest ROI.", badge: "should", url: "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology",
+  { phase: 2, name: "Lab 72: Network Troubleshooting Methodology", lessons: 5, why: "Role = troubleshooting customer issues. Shortest, highest ROI.", badge: "should", url: "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology", weight: 8, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/tshoot-approaches",
       "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/layer-1-2-tshoot",
@@ -314,89 +334,89 @@ const COURSES = [
       "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/end-to-end",
       "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/multi-layer-challenge"
     ]},
-  { phase: 2, name: "ASA BY Mr.SUSHIL", lessons: 19, why: "Cisco ASA firewall — strengthens firewall + security depth", badge: "should", url: "https://nhprep.com/course/asa-by-mrsushil",
+  { phase: 2, name: "ASA BY Mr.SUSHIL", lessons: 19, why: "Cisco ASA firewall — strengthens firewall + security depth", badge: "should", url: "https://nhprep.com/course/asa-by-mrsushil", weight: 7, completed: false,
     lessonUrls: [
       null,
       "https://nhprep.com/course/asa-by-mrsushil/lesson/day-01-asa-l-mp4",
       "https://nhprep.com/course/asa-by-mrsushil/lesson/0204-6mp4",
       null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
-  { phase: 2, name: "BUG BOUNTY HUNTING", lessons: 28, why: "Web App Security / OWASP Top 10 — Barracuda WAF role", badge: "should", url: "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj",
+  { phase: 2, name: "BUG BOUNTY HUNTING", lessons: 28, why: "Web App Security / OWASP Top 10 — Barracuda WAF role", badge: "should", url: "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj", weight: 8, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj/lesson/day-01-bug-bounty-hunting-fundamental-concepts-and-course-modules-overviewmp4",
       "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj/lesson/day-02-bug-bounty-plateform-with-bug-bounty-hunter-need-to-know-conceptsmp4",
       null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
-  { phase: 2, name: "IPSEC", lessons: 7, why: "VPN/IPsec fundamentals — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ipsec",
+  { phase: 2, name: "IPSEC", lessons: 7, why: "VPN/IPsec fundamentals — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ipsec", weight: 6, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/ipsec/lesson/1mp4",
       "https://nhprep.com/course/ipsec/lesson/2mp4",
       null,null,null,null,null
     ]},
-  { phase: 2, name: "NGIPS", lessons: 9, why: "Next-Gen IPS — Barracuda security products use IPS", badge: "should", url: "https://nhprep.com/course/ngips",
+  { phase: 2, name: "NGIPS", lessons: 9, why: "Next-Gen IPS — Barracuda security products use IPS", badge: "should", url: "https://nhprep.com/course/ngips", weight: 5, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/ngips/lesson/day_01_ngipsmp4",
       "https://nhprep.com/course/ngips/lesson/day_02_ngipsmp4",
       null,null,null,null,null,null,null
     ]},
-  { phase: 2, name: "Cisco ESA - Email Security appliance", lessons: 5, why: "Reinforces ESA — Barracuda = Email Security", badge: "should", url: "https://nhprep.com/course/cisco-esa-email-security-applaince",
+  { phase: 2, name: "Cisco ESA - Email Security appliance", lessons: 5, why: "Reinforces ESA — Barracuda = Email Security", badge: "should", url: "https://nhprep.com/course/cisco-esa-email-security-applaince", weight: 6, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/cisco-esa-email-security-applaince/lesson/1-introduction-history-specificationmp4",
       "https://nhprep.com/course/cisco-esa-email-security-applaince/lesson/2-email-authentication-overview-dmarkspfdkimmp4",
       null,null,null
     ]},
-  { phase: 2, name: "F5 VINEET", lessons: 9, why: "F5 = WAF (Web Application Firewall) — role explicitly says 'Work with WAF'", badge: "should", url: "https://nhprep.com/course/f5-vineet",
+  { phase: 2, name: "F5 VINEET", lessons: 9, why: "F5 = WAF (Web Application Firewall) — role explicitly says 'Work with WAF'", badge: "should", url: "https://nhprep.com/course/f5-vineet", weight: 7, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null]},
-  { phase: 2, name: "Lab 30: Email & Web Security", lessons: 6, why: "Covers BOTH Email Security + Web Security — role = 'WAF, Email Security, Backup & Firewall'", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-10-email-web-security",
+  { phase: 2, name: "Lab 30: Email & Web Security", lessons: 6, why: "Covers BOTH Email Security + Web Security — role = 'WAF, Email Security, Backup & Firewall'", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-10-email-web-security", weight: 5, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
   // PHASE 3 — Bonus
-  { phase: 3, name: "Palo Alto Firewall (Sushil)", lessons: 20, why: "Second firewall vendor — multi-vendor environments", badge: "nice", url: "https://nhprep.com/course/palo-alto-by-sushil",
+  { phase: 3, name: "Palo Alto Firewall (Sushil)", lessons: 20, why: "Second firewall vendor — multi-vendor environments", badge: "nice", url: "https://nhprep.com/course/palo-alto-by-sushil", weight: 4, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/palo-alto-by-sushil/lesson/video1000780102mp4",
       null,null,null,null,null,null,null,null,null,
       "https://nhprep.com/course/palo-alto-by-sushil/lesson/video1064592854mp4",
       null,null,null,null,null,null,null,null
     ]},
-  { phase: 3, name: "OSI & ARP", lessons: 12, why: "TCP/IP, UDP fundamentals — required skill", badge: "nice", url: "https://nhprep.com/course/osi-arp",
+  { phase: 3, name: "OSI & ARP", lessons: 12, why: "TCP/IP, UDP fundamentals — required skill", badge: "nice", url: "https://nhprep.com/course/osi-arp", weight: 4, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/osi-arp/lesson/day_1_osi-part-1mp4",
       "https://nhprep.com/course/osi-arp/lesson/day_2_osi-part-2mp4",
       null,null,null,null,null,null,null,null,null,null
     ]},
-  { phase: 3, name: "FTD BY AMIT", lessons: 11, why: "Cisco Firepower Threat Defense = next-gen firewall — role = 'Firewall solutions'", badge: "nice", url: "https://nhprep.com/course/ftd-by-amit",
+  { phase: 3, name: "FTD BY AMIT", lessons: 11, why: "Cisco Firepower Threat Defense = next-gen firewall — role = 'Firewall solutions'", badge: "nice", url: "https://nhprep.com/course/ftd-by-amit", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null,null]},
-  { phase: 3, name: "CHECKPOINT", lessons: 15, why: "Major firewall vendor — strengthens 'any 1 Firewall' depth", badge: "nice", url: "https://nhprep.com/course/checkpoint",
+  { phase: 3, name: "CHECKPOINT", lessons: 15, why: "Major firewall vendor — strengthens 'any 1 Firewall' depth", badge: "nice", url: "https://nhprep.com/course/checkpoint", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
-  { phase: 3, name: "Cisco Secure Firewall Mastery", lessons: 5, why: "Direct firewall mastery course — role = 'Firewall solutions'", badge: "nice", url: "https://nhprep.com/course/secure-firewall-mastery",
+  { phase: 3, name: "Cisco Secure Firewall Mastery", lessons: 5, why: "Direct firewall mastery course — role = 'Firewall solutions'", badge: "nice", url: "https://nhprep.com/course/secure-firewall-mastery", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null]},
   // PHASE 4 — Hands-On Labs & Security Depth (new courses, high response, 0% watched)
-  { phase: 4, name: "VPN Security (Sushil)", lessons: 24, why: "VPN depth — Barracuda VPN products. Different angle from VPN Technologies.", badge: "should", url: "https://nhprep.com/course/vpn-by-sushil",
+  { phase: 4, name: "VPN Security (Sushil)", lessons: 24, why: "VPN depth — Barracuda VPN products. Different angle from VPN Technologies.", badge: "should", url: "https://nhprep.com/course/vpn-by-sushil", weight: 4, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
-  { phase: 4, name: "CCNP Security VPN (Murtaza)", lessons: 10, why: "CCNP Security VPN track — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ccnp-security-vpn-by-murtaza",
+  { phase: 4, name: "CCNP Security VPN (Murtaza)", lessons: 10, why: "CCNP Security VPN track — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ccnp-security-vpn-by-murtaza", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
-  { phase: 4, name: "CCNP SD-WAN", lessons: 10, why: "SD-WAN = modern networking — Barracuda supports SD-WAN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sd-wan-mohnish",
+  { phase: 4, name: "CCNP SD-WAN", lessons: 10, why: "SD-WAN = modern networking — Barracuda supports SD-WAN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sd-wan-mohnish", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
-  { phase: 4, name: "STEALTHWATCH (Sushil)", lessons: 4, why: "Network security monitoring — role = 'Network Security & Firewalls'", badge: "should", url: "https://nhprep.com/course/stealthwatch-by-sushil",
+  { phase: 4, name: "STEALTHWATCH (Sushil)", lessons: 4, why: "Network security monitoring — role = 'Network Security & Firewalls'", badge: "should", url: "https://nhprep.com/course/stealthwatch-by-sushil", weight: 2, completed: false,
     lessonUrls: [null,null,null,null]},
-  { phase: 4, name: "SPLUNK SERIES (Ajay)", lessons: 8, why: "SIEM/log analysis — troubleshooting & security product monitoring", badge: "should", url: "https://nhprep.com/course/splunk-series-by-ajay",
+  { phase: 4, name: "SPLUNK SERIES (Ajay)", lessons: 8, why: "SIEM/log analysis — troubleshooting & security product monitoring", badge: "should", url: "https://nhprep.com/course/splunk-series-by-ajay", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null]},
-  { phase: 4, name: "CISSP", lessons: 5, why: "Security fundamentals — Network Security requirement", badge: "should", url: "https://nhprep.com/course/cissp",
+  { phase: 4, name: "CISSP", lessons: 5, why: "Security fundamentals — Network Security requirement", badge: "should", url: "https://nhprep.com/course/cissp", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
-  { phase: 4, name: "CCNP SECURITY - CISCO DUO (Pranav)", lessons: 5, why: "MFA/zero-trust security — Barracuda security products", badge: "should", url: "https://nhprep.com/course/ccnp-security-cisco-duo-by-pranav",
+  { phase: 4, name: "CCNP SECURITY - CISCO DUO (Pranav)", lessons: 5, why: "MFA/zero-trust security — Barracuda security products", badge: "should", url: "https://nhprep.com/course/ccnp-security-cisco-duo-by-pranav", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
-  { phase: 4, name: "Lab 24: Site-to-Site IPsec VPN", lessons: 7, why: "Hands-on VPN config — Barracuda VPN products", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-04-site-to-site-vpn",
+  { phase: 4, name: "Lab 24: Site-to-Site IPsec VPN", lessons: 7, why: "Hands-on VPN config — Barracuda VPN products", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-04-site-to-site-vpn", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null,null]},
-  { phase: 4, name: "Lab 25: AnyConnect SSL VPN", lessons: 7, why: "Remote access VPN — Barracuda VPN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-05-anyconnect-ssl-vpn",
+  { phase: 4, name: "Lab 25: AnyConnect SSL VPN", lessons: 7, why: "Remote access VPN — Barracuda VPN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-05-anyconnect-ssl-vpn", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null,null]},
-  { phase: 4, name: "Lab 22: ASA NAT", lessons: 7, why: "ASA firewall NAT — firewall troubleshooting depth", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-02-asa-nat",
+  { phase: 4, name: "Lab 22: ASA NAT", lessons: 7, why: "ASA firewall NAT — firewall troubleshooting depth", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-02-asa-nat", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null,null]},
-  { phase: 4, name: "Lab 23: ASA Access Control & Inspection", lessons: 6, why: "ASA firewall policies — firewall depth", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-03-asa-access-control",
+  { phase: 4, name: "Lab 23: ASA Access Control & Inspection", lessons: 6, why: "ASA firewall policies — firewall depth", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-03-asa-access-control", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
-  { phase: 4, name: "Lab 32: FTD Access Control & IPS", lessons: 6, why: "FTD + IPS hands-on — Barracuda security products", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-12-ftd-access-control",
+  { phase: 4, name: "Lab 32: FTD Access Control & IPS", lessons: 6, why: "FTD + IPS hands-on — Barracuda security products", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-12-ftd-access-control", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
-  { phase: 4, name: "Lab 33: Secure Firewall Zero Trust", lessons: 6, why: "Zero Trust firewall — modern security architecture", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-13-zero-trust-firewall",
+  { phase: 4, name: "Lab 33: Secure Firewall Zero Trust", lessons: 6, why: "Zero Trust firewall — modern security architecture", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-13-zero-trust-firewall", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
-  { phase: 4, name: "Lab 71: Device Security Hardening", lessons: 5, why: "Security hardening — Network Security requirement", badge: "should", url: "https://nhprep.com/course/ccna-lab-21-device-security",
+  { phase: 4, name: "Lab 71: Device Security Hardening", lessons: 5, why: "Security hardening — Network Security requirement", badge: "should", url: "https://nhprep.com/course/ccna-lab-21-device-security", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
 ];
 
@@ -439,7 +459,8 @@ function render() {
 
     phaseCourses.forEach((course, idx) => {
       const cKey = course.name;
-      const done = progress[cKey] || 0;
+      // If marked completed on NHPREP, show as fully done
+      const done = course.completed ? course.lessons : (progress[cKey] || 0);
       const allDone = done >= course.lessons;
       if (allDone) coursesDone++;
       totalDone += done;
@@ -470,7 +491,8 @@ function render() {
           <div class="course-meta">
             <a href="${course.url}" target="_blank" style="color:var(--accent);text-decoration:none;font-size:0.8rem;">Open course ↗</a><br>
             <span class="pct">${pct}%</span><br>
-            <span>${done}/${course.lessons} lessons</span>
+            <span>${done}/${course.lessons} lessons</span><br>
+            <span style="font-size:0.75rem; color:var(--accent2); font-weight:700;">⭐ ${course.weight}% weight</span>
           </div>
         </div>
         <div class="course-bar"><div class="course-bar-fill" style="width:${pct}%"></div></div>
@@ -491,10 +513,88 @@ function render() {
   fill.style.width = Math.max(40, overallPct) + "%";
   fill.textContent = overallPct + "%";
 
+  // ---- Job Readiness Score (weighted) ----
+  // A course is "done" if marked completed on NHPREP OR tracker progress >= lessons
+  const isCourseDone = (c) => (c.completed) || ((progress[c.name] || 0) >= c.lessons);
+  const totalWeight = COURSES.reduce((s, c) => s + c.weight, 0);
+  const earnedWeight = COURSES.reduce((s, c) => s + (isCourseDone(c) ? c.weight : 0), 0);
+  const readinessPct = Math.round((earnedWeight / totalWeight) * 100);
+
+  // Phase 1 eligibility (HR mandatory)
+  const phase1Courses = COURSES.filter(c => c.phase === 1);
+  const phase1DoneCount = phase1Courses.filter(isCourseDone).length;
+  const eligible = phase1Courses.every(isCourseDone);
+
+  // Breakdown by category
+  const categories = {
+    "CCNP R&S": ["CCNP Routing (Nikunj)", "CCNP Switching"],
+    "WSA": ["CCNP Security WSA - Mohnish"],
+    "ESA": ["Cisco ESA - Email Security appliance"],
+    "Linux": ["Linux Fundamentals"],
+    "VPN": ["IPSEC", "VPN Security (Sushil)", "CCNP Security VPN (Murtaza)", "Lab 24: Site-to-Site IPsec VPN", "Lab 25: AnyConnect SSL VPN"],
+    "Firewall": ["ASA BY Mr.SUSHIL", "Palo Alto Firewall (Sushil)", "FTD BY AMIT", "CHECKPOINT", "Cisco Secure Firewall Mastery", "Lab 22: ASA NAT", "Lab 23: ASA Access Control & Inspection", "Lab 32: FTD Access Control & IPS", "Lab 33: Secure Firewall Zero Trust"],
+    "WAF / Web Sec": ["BUG BOUNTY HUNTING", "F5 VINEET", "Lab 30: Email & Web Security"],
+    "Troubleshooting": ["Lab 72: Network Troubleshooting Methodology", "SPLUNK SERIES (Ajay)"],
+    "IPS / Monitoring": ["NGIPS", "STEALTHWATCH (Sushil)"],
+    "Fundamentals": ["OSI & ARP", "CISSP", "CCNP SD-WAN", "CCNP SECURITY - CISCO DUO (Pranav)", "Lab 71: Device Security Hardening"],
+  };
+
+  let breakdownHTML = "";
+  for (const [cat, names] of Object.entries(categories)) {
+    const catCourses = COURSES.filter(c => names.includes(c.name));
+    const catDone = catCourses.filter(isCourseDone).length;
+    const catWeight = catCourses.reduce((s, c) => s + c.weight, 0);
+    const catEarned = catCourses.reduce((s, c) => s + (isCourseDone(c) ? c.weight : 0), 0);
+    const catPct = catWeight > 0 ? Math.round((catEarned / catWeight) * 100) : 0;
+    const status = catDone === catCourses.length ? "✅" : (catDone > 0 ? "🔄" : "⬜");
+    breakdownHTML += `<div>${status} <strong>${cat}</strong>: ${catDone}/${catCourses.length} courses · ${catPct}% weight</div>`;
+  }
+  document.getElementById("readinessBreakdown").innerHTML = breakdownHTML;
+
+  // Readiness bar
+  const rFill = document.getElementById("readinessFill");
+  rFill.style.width = Math.max(40, readinessPct) + "%";
+  rFill.textContent = readinessPct + "%";
+  document.getElementById("readinessPct").textContent = readinessPct + "%";
+
+  // Eligibility
+  const eligEl = document.getElementById("eligibleStatus");
+  if (eligible) {
+    eligEl.textContent = "YES ✅";
+    eligEl.style.color = "var(--green)";
+  } else {
+    eligEl.textContent = `NO (${phase1DoneCount}/${phase1Courses.length} Phase 1 done)`;
+    eligEl.style.color = "var(--red)";
+  }
+
+  // Verdict
+  const verdictEl = document.getElementById("readinessVerdict");
+  if (readinessPct >= 80) {
+    verdictEl.textContent = "🟢 EXCELLENT — You're interview-ready! Go crack it.";
+    verdictEl.style.background = "rgba(34,197,94,0.15)";
+    verdictEl.style.borderColor = "var(--green)";
+    verdictEl.style.color = "var(--green)";
+  } else if (readinessPct >= 50) {
+    verdictEl.textContent = "🟡 GOOD — Keep going. Finish the remaining high-weight courses.";
+    verdictEl.style.background = "rgba(234,179,8,0.15)";
+    verdictEl.style.borderColor = "var(--yellow)";
+    verdictEl.style.color = "var(--yellow)";
+  } else if (readinessPct >= 25) {
+    verdictEl.textContent = "🟠 PROGRESS — You've started. Focus on Phase 1 mandatory courses first.";
+    verdictEl.style.background = "rgba(249,115,22,0.15)";
+    verdictEl.style.borderColor = "#f97316";
+    verdictEl.style.color = "#f97316";
+  } else {
+    verdictEl.textContent = "🔴 EARLY STAGE — Complete Phase 1 (mandatory) to become eligible to apply.";
+    verdictEl.style.background = "rgba(239,68,68,0.15)";
+    verdictEl.style.borderColor = "var(--red)";
+    verdictEl.style.color = "var(--red)";
+  }
+
   // Milestones
-  const phase1Done = COURSES.filter(c => c.phase === 1).every(c => (progress[c.name] || 0) >= c.lessons);
-  const phase2Done = COURSES.filter(c => c.phase === 2).every(c => (progress[c.name] || 0) >= c.lessons);
-  const allDone = COURSES.every(c => (progress[c.name] || 0) >= c.lessons);
+  const phase1Done = phase1Courses.every(isCourseDone);
+  const phase2Done = COURSES.filter(c => c.phase === 2).every(isCourseDone);
+  const allDone = COURSES.every(isCourseDone);
   document.getElementById("milestoneApply").classList.toggle("show", phase1Done && !allDone);
   document.getElementById("milestoneInterview").classList.toggle("show", phase2Done && !allDone);
   document.getElementById("milestoneFull").classList.toggle("show", allDone);
