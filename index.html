@@ -418,6 +418,31 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null,null]},
   { phase: 4, name: "Lab 71: Device Security Hardening", lessons: 5, why: "Security hardening — Network Security requirement", badge: "should", url: "https://nhprep.com/course/ccna-lab-21-device-security", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
+  // PHASE 5 — Gaps from official Barracuda TSE-2 JD
+  { phase: 5, name: "PYTHON", lessons: 6, why: "JD: 'Debug the issue and provide a solution' — Python used for debugging/automation at Barracuda", badge: "must", url: "https://nhprep.com/course/python", weight: 5, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 5, name: "Microsoft Azure", lessons: 20, why: "Barracuda is cloud-first — many roles require Azure/AWS cloud knowledge", badge: "should", url: "https://nhprep.com/course/azure-by-amit", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 5, name: "AWS Cloud", lessons: 20, why: "Barracuda XDR/email products run on AWS — cloud knowledge is a plus", badge: "should", url: "https://nhprep.com/course/aws-cloud-by-amit", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 5, name: "CCNP ENCOR Exam Bootcamp", lessons: 5, why: "CCNP ENCOR covers networking fundamentals — JD prefers CCNA/CCNP", badge: "should", url: "https://nhprep.com/course/ccnp-encor-exam-bootcamp", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 5, name: "CCNA Hands-On Practice Lab", lessons: 5, why: "Hands-on CCNA practice — JD: 'Excellent understanding of TCP/IP and UDP'", badge: "should", url: "https://nhprep.com/course/ccna-hands-on-practice-lab", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 5, name: "Lab 64: IPv4 Subnetting Lab", lessons: 6, why: "JD: 'Excellent understanding of TCP/IP' — subnetting is core TCP/IP skill", badge: "should", url: "https://nhprep.com/course/ccna-lab-14-subnetting", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 5, name: "Lab 8: ACLs & Port Security", lessons: 6, why: "JD: 'network firewall domain' — ACLs are fundamental to firewall rules", badge: "should", url: "https://nhprep.com/course/ccna-lab-08-acls-and-port-security", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 5, name: "Lab 70: Extended Access Control Lists", lessons: 5, why: "JD: 'URL filtering in proxy' — extended ACLs are used for filtering", badge: "should", url: "https://nhprep.com/course/ccna-lab-20-extended-acls", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 5, name: "Lab 73: DHCP Snooping & DAI", lessons: 5, why: "JD: 'network security' — DHCP snooping prevents L2 attacks", badge: "should", url: "https://nhprep.com/course/ccna-lab-23-dhcp-snooping-dai", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 5, name: "Lab 67: Dynamic Routing Troubleshooting", lessons: 5, why: "JD: 'Strong analytical and troubleshooting skills' — routing troubleshooting", badge: "should", url: "https://nhprep.com/course/ccna-lab-17-routing-troubleshooting", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 5, name: "Lab 65: OSPF Troubleshooting", lessons: 5, why: "JD: 'troubleshooting skills' — OSPF is core enterprise routing", badge: "should", url: "https://nhprep.com/course/ccna-lab-15-ospf-troubleshooting", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 5, name: "AI-Powered Network Security", lessons: 10, why: "Barracuda uses AI in cybersecurity — 'AI in Cybersecurity' is a Barracuda product line", badge: "should", url: "https://nhprep.com/course/ai-powered-network-security", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
 ];
 
 const PHASE_INFO = {
@@ -425,6 +450,7 @@ const PHASE_INFO = {
   2: { title: "Phase 2 — Crack the Interview", label: "SHOULD DO", badge: "badge-should" },
   3: { title: "Phase 3 — Bonus / Final Round", label: "NICE TO HAVE", badge: "badge-nice" },
   4: { title: "Phase 4 — Hands-On Labs & Security Depth", label: "NEW & RELEVANT", badge: "badge-should" },
+  5: { title: "Phase 5 — JD Gap Fillers (from Official TSE-2 JD)", label: "JD REQUIREMENTS", badge: "badge-must" },
 };
 
 const STORAGE_KEY = "barracuda_tracker_v1";
@@ -445,7 +471,7 @@ function render() {
   phasesDiv.innerHTML = "";
   let totalDone = 0, totalAll = 0, coursesDone = 0;
 
-  [1, 2, 3, 4].forEach(phaseNum => {
+  [1, 2, 3, 4, 5].forEach(phaseNum => {
     const info = PHASE_INFO[phaseNum];
     const phaseCourses = COURSES.filter(c => c.phase === phaseNum).sort((a, b) => b.weight - a.weight);
     const phaseDiv = document.createElement("div");
@@ -537,6 +563,10 @@ function render() {
     "Troubleshooting": ["Lab 72: Network Troubleshooting Methodology", "SPLUNK SERIES (Ajay)"],
     "IPS / Monitoring": ["NGIPS", "STEALTHWATCH (Sushil)"],
     "Fundamentals": ["OSI & ARP", "CISSP", "CCNP SD-WAN", "CCNP SECURITY - CISCO DUO (Pranav)", "Lab 71: Device Security Hardening"],
+    "Python/Debugging": ["PYTHON"],
+    "Cloud (AWS/Azure)": ["Microsoft Azure", "AWS Cloud"],
+    "TCP/IP Hands-On": ["CCNP ENCOR Exam Bootcamp", "CCNA Hands-On Practice Lab", "Lab 64: IPv4 Subnetting Lab", "Lab 8: ACLs & Port Security", "Lab 70: Extended Access Control Lists", "Lab 73: DHCP Snooping & DAI", "Lab 67: Dynamic Routing Troubleshooting", "Lab 65: OSPF Troubleshooting"],
+    "AI Security": ["AI-Powered Network Security"],
   };
 
   let breakdownHTML = "";
