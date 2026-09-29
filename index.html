@@ -206,6 +206,25 @@
   .lesson-link:hover { color: #fff; text-decoration: underline; }
   .lesson.checked .lesson-link { color: var(--green); }
 
+  /* Connected Labs */
+  .connected-labs {
+    display: none; flex-wrap: wrap; gap: 6px; padding-top: 12px;
+    border-top: 1px solid var(--o-line); margin-top: 4px;
+  }
+  .connected-labs.open { display: flex; }
+  .labs-label {
+    width: 100%; font-size: 0.75rem; color: var(--o-accent); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .lab-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--o-accent-dim); padding: 4px 10px; border-radius: var(--o-radius-sm);
+    font-size: 0.78rem; border: 1px solid var(--o-line-hi); transition: all 0.15s;
+  }
+  .lab-chip:hover { background: var(--o-panel-hi); transform: translateY(-1px); }
+  .lab-chip a { color: var(--o-accent); text-decoration: none; font-weight: 600; }
+  .lab-chip a:hover { color: #fff; text-decoration: underline; }
+
   /* Controls */
   .controls {
     display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; flex-wrap: wrap;
@@ -384,6 +403,7 @@
 const COURSES = [
   // PHASE 1 — Mandatory
   { phase: 1, name: "CCNP Routing (Nikunj)", lessons: 23, why: "CCNP Routing — HR mandatory (already 100% done, videos for reference)", badge: "must", url: "https://nhprep.com/course/ccnp-routing-by-nikunj", weight: 12, completed: true,
+    labs: ["Lab 4: Static Routing & IP SLA|/course/ccna-lab-04-static-routing-ip-sla","Lab 5: OSPF Single Area|/course/ccna-lab-05-ospf-single-area","Lab 6: Multi-Area OSPF|/course/ccna-lab-06-multi-area-ospf","Lab 7: DHCP, NAT & PAT|/course/ccna-lab-07-dhcp-nat-pat","Lab 11: Advanced OSPF|/course/ccnp-lab-01-advanced-ospf","Lab 12: EIGRP Mastery|/course/ccnp-lab-02-eigrp-mastery","Lab 13: BGP Fundamentals|/course/ccnp-lab-03-bgp-fundamentals","Lab 14: BGP Path Selection|/course/ccnp-lab-04-bgp-path-selection","Lab 15: Route Redistribution|/course/ccnp-lab-05-redistribution","Lab 17: MPLS VPN|/course/ccnp-lab-07-mpls-vpn","Lab 20: QoS & Network Automation|/course/ccnp-lab-10-qos-and-automation"],
     lessonUrls: [
       null,
       "https://nhprep.com/course/ccnp-routing-by-nikunj/lesson/day-01-ccnp-course-and-exam-book-discussion-with-routing-module-topics-and-knowledge-checkmp4",
@@ -391,12 +411,14 @@ const COURSES = [
       null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
   { phase: 1, name: "CCNP Switching", lessons: 15, why: "Completes 'CCNP routing & switching' — HR mandatory", badge: "must", url: "https://nhprep.com/course/ccnp-switching", weight: 12, completed: false,
+    labs: ["Lab 1: VLANs & Trunking|/course/ccna-lab-01-vlans-and-trunking","Lab 2: Inter-VLAN Routing|/course/ccna-lab-02-inter-vlan-routing","Lab 3: EtherChannel & Spanning Tree|/course/ccna-lab-03-etherchannel-and-stp","Lab 10: FHRP & Network Services|/course/ccna-lab-10-fhrp-and-services","Lab 19: SD-Access Fabric|/course/ccnp-lab-09-sda-fabric"],
     lessonUrls: [
       "https://nhprep.com/course/ccnp-switching/lesson/day-01-introduction-to-switchingmp4",
       "https://nhprep.com/course/ccnp-switching/lesson/day-02-layer-2-forwarding-vlan-basicsmp4",
       null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
   { phase: 1, name: "CCNP Security WSA - Mohnish", lessons: 9, why: "WSA requirement — HR mandatory", badge: "must", url: "https://nhprep.com/course/ccnp-security-wsa-mohnish", weight: 10, completed: false,
+    labs: ["Lab 30: Email & Web Security|/course/ccnp-sec-lab-10-email-web-security"],
     lessonUrls: [
       null,null,null,null,null,null,
       "https://nhprep.com/course/ccnp-security-wsa-mohnish/lesson/wsa-day-7mp4",
@@ -420,6 +442,7 @@ const COURSES = [
       "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/multi-layer-challenge"
     ]},
   { phase: 2, name: "ASA BY Mr.SUSHIL", lessons: 19, why: "Cisco ASA firewall — strengthens firewall + security depth", badge: "should", url: "https://nhprep.com/course/asa-by-mrsushil", weight: 7, completed: false,
+    labs: ["Lab 21: ASA Firewall Basics|/course/ccnp-sec-lab-01-asa-firewall-basics","Lab 22: ASA NAT|/course/ccnp-sec-lab-02-asa-nat","Lab 23: ASA Access Control & Inspection|/course/ccnp-sec-lab-03-asa-access-control","Lab 29: TACACS+ & AAA|/course/ccnp-sec-lab-09-tacacs-aaa"],
     lessonUrls: [
       null,
       "https://nhprep.com/course/asa-by-mrsushil/lesson/day-01-asa-l-mp4",
@@ -433,6 +456,7 @@ const COURSES = [
       null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
   { phase: 2, name: "IPSEC", lessons: 7, why: "VPN/IPsec fundamentals — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ipsec", weight: 6, completed: false,
+    labs: ["Lab 16: DMVPN & IPsec|/course/ccnp-lab-06-dmvpn-ipsec","Lab 24: Site-to-Site IPsec VPN|/course/ccnp-sec-lab-04-site-to-site-vpn","Lab 26: DMVPN & FlexVPN|/course/ccnp-sec-lab-06-dmvpn-flexvpn"],
     lessonUrls: [
       "https://nhprep.com/course/ipsec/lesson/1mp4",
       "https://nhprep.com/course/ipsec/lesson/2mp4",
@@ -476,10 +500,12 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null]},
   // PHASE 4 — Hands-On Labs & Security Depth (new courses, high response, 0% watched)
   { phase: 4, name: "VPN Security (Sushil)", lessons: 24, why: "VPN depth — Barracuda VPN products. Different angle from VPN Technologies.", badge: "should", url: "https://nhprep.com/course/vpn-by-sushil", weight: 4, completed: false,
+    labs: ["Lab 16: DMVPN & IPsec|/course/ccnp-lab-06-dmvpn-ipsec","Lab 24: Site-to-Site IPsec VPN|/course/ccnp-sec-lab-04-site-to-site-vpn","Lab 25: AnyConnect SSL VPN|/course/ccnp-sec-lab-05-anyconnect-ssl-vpn","Lab 26: DMVPN & FlexVPN|/course/ccnp-sec-lab-06-dmvpn-flexvpn"],
     lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
   { phase: 4, name: "CCNP Security VPN (Murtaza)", lessons: 10, why: "CCNP Security VPN track — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ccnp-security-vpn-by-murtaza", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
   { phase: 4, name: "CCNP SD-WAN", lessons: 10, why: "SD-WAN = modern networking — Barracuda supports SD-WAN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sd-wan-mohnish", weight: 2, completed: false,
+    labs: ["Lab 18: SD-WAN Deployment|/course/ccnp-lab-08-sdwan"],
     lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
   { phase: 4, name: "STEALTHWATCH (Sushil)", lessons: 4, why: "Network security monitoring — role = 'Network Security & Firewalls'", badge: "should", url: "https://nhprep.com/course/stealthwatch-by-sushil", weight: 2, completed: false,
     lessonUrls: [null,null,null,null]},
@@ -594,6 +620,17 @@ function render() {
           </div>`;
       }
 
+      // Build connected labs HTML
+      let labsHTML = "";
+      if (course.labs && course.labs.length > 0) {
+        labsHTML = `<div class="connected-labs" id="labs-${cKey}"><div class="labs-label">🔧 Connected Labs (${course.labs.length})</div>`;
+        course.labs.forEach(lab => {
+          const [labName, labUrl] = lab.split("|");
+          labsHTML += `<div class="lab-chip"><a href="https://nhprep.com${labUrl}" target="_blank">${labName} ↗</a></div>`;
+        });
+        labsHTML += `</div>`;
+      }
+
       card.innerHTML = `
         <div class="course-header" onclick="toggleLessons('${cKey}')">
           <div class="course-name">
@@ -601,14 +638,16 @@ function render() {
             <span class="why">📌 ${course.why}</span>
           </div>
           <div class="course-meta">
-            <a href="${course.url}" target="_blank" style="color:var(--accent);text-decoration:none;font-size:0.8rem;">Open course ↗</a><br>
+            <a href="${course.url}" target="_blank" style="color:var(--o-accent);text-decoration:none;font-size:0.8rem;">Open course ↗</a><br>
             <span class="pct">${pct}%</span><br>
             <span>${done}/${course.lessons} lessons</span><br>
-            <span style="font-size:0.75rem; color:var(--accent2); font-weight:700;">⭐ ${course.weight}% weight</span>
+            <span style="font-size:0.75rem; color:var(--o-accent); font-weight:700;">⭐ ${course.weight}% weight</span>
+            ${course.labs && course.labs.length > 0 ? `<br><span style="font-size:0.7rem; color:var(--o-mute);">🔧 ${course.labs.length} labs</span>` : ""}
           </div>
         </div>
         <div class="course-bar"><div class="course-bar-fill" style="width:${pct}%"></div></div>
         <div class="lessons" id="lessons-${cKey}">${lessonsHTML}</div>
+        ${labsHTML}
       `;
       phaseDiv.appendChild(card);
     });
@@ -739,12 +778,18 @@ function toggleLesson(courseName, lessonNum, totalLessons) {
 function toggleLessons(courseName) {
   const el = document.getElementById("lessons-" + courseName);
   el.classList.toggle("open");
+  // Also toggle connected labs
+  const labs = document.getElementById("labs-" + courseName);
+  if (labs) labs.classList.toggle("open");
 }
 
 let allOpen = false;
 function toggleAllLessons() {
   allOpen = !allOpen;
   document.querySelectorAll(".lessons").forEach(el => {
+    el.classList.toggle("open", allOpen);
+  });
+  document.querySelectorAll(".connected-labs").forEach(el => {
     el.classList.toggle("open", allOpen);
   });
 }
