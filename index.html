@@ -369,12 +369,42 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
   { phase: 3, name: "Cisco Secure Firewall Mastery", lessons: 5, why: "Direct firewall mastery course — role = 'Firewall solutions'", badge: "nice", url: "https://nhprep.com/course/secure-firewall-mastery",
     lessonUrls: [null,null,null,null,null]},
+  // PHASE 4 — Hands-On Labs & Security Depth (new courses, high response, 0% watched)
+  { phase: 4, name: "VPN Security (Sushil)", lessons: 24, why: "VPN depth — Barracuda VPN products. Different angle from VPN Technologies.", badge: "should", url: "https://nhprep.com/course/vpn-by-sushil",
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 4, name: "CCNP Security VPN (Murtaza)", lessons: 10, why: "CCNP Security VPN track — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ccnp-security-vpn-by-murtaza",
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
+  { phase: 4, name: "CCNP SD-WAN", lessons: 10, why: "SD-WAN = modern networking — Barracuda supports SD-WAN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sd-wan-mohnish",
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
+  { phase: 4, name: "STEALTHWATCH (Sushil)", lessons: 4, why: "Network security monitoring — role = 'Network Security & Firewalls'", badge: "should", url: "https://nhprep.com/course/stealthwatch-by-sushil",
+    lessonUrls: [null,null,null,null]},
+  { phase: 4, name: "SPLUNK SERIES (Ajay)", lessons: 8, why: "SIEM/log analysis — troubleshooting & security product monitoring", badge: "should", url: "https://nhprep.com/course/splunk-series-by-ajay",
+    lessonUrls: [null,null,null,null,null,null,null,null]},
+  { phase: 4, name: "CISSP", lessons: 5, why: "Security fundamentals — Network Security requirement", badge: "should", url: "https://nhprep.com/course/cissp",
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 4, name: "CCNP SECURITY - CISCO DUO (Pranav)", lessons: 5, why: "MFA/zero-trust security — Barracuda security products", badge: "should", url: "https://nhprep.com/course/ccnp-security-cisco-duo-by-pranav",
+    lessonUrls: [null,null,null,null,null]},
+  { phase: 4, name: "Lab 24: Site-to-Site IPsec VPN", lessons: 7, why: "Hands-on VPN config — Barracuda VPN products", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-04-site-to-site-vpn",
+    lessonUrls: [null,null,null,null,null,null,null]},
+  { phase: 4, name: "Lab 25: AnyConnect SSL VPN", lessons: 7, why: "Remote access VPN — Barracuda VPN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-05-anyconnect-ssl-vpn",
+    lessonUrls: [null,null,null,null,null,null,null]},
+  { phase: 4, name: "Lab 22: ASA NAT", lessons: 7, why: "ASA firewall NAT — firewall troubleshooting depth", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-02-asa-nat",
+    lessonUrls: [null,null,null,null,null,null,null]},
+  { phase: 4, name: "Lab 23: ASA Access Control & Inspection", lessons: 6, why: "ASA firewall policies — firewall depth", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-03-asa-access-control",
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 4, name: "Lab 32: FTD Access Control & IPS", lessons: 6, why: "FTD + IPS hands-on — Barracuda security products", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-12-ftd-access-control",
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 4, name: "Lab 33: Secure Firewall Zero Trust", lessons: 6, why: "Zero Trust firewall — modern security architecture", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-13-zero-trust-firewall",
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 4, name: "Lab 71: Device Security Hardening", lessons: 5, why: "Security hardening — Network Security requirement", badge: "should", url: "https://nhprep.com/course/ccna-lab-21-device-security",
+    lessonUrls: [null,null,null,null,null]},
 ];
 
 const PHASE_INFO = {
   1: { title: "Phase 1 — Become Eligible to Apply", label: "MUST DO", badge: "badge-must" },
   2: { title: "Phase 2 — Crack the Interview", label: "SHOULD DO", badge: "badge-should" },
   3: { title: "Phase 3 — Bonus / Final Round", label: "NICE TO HAVE", badge: "badge-nice" },
+  4: { title: "Phase 4 — Hands-On Labs & Security Depth", label: "NEW & RELEVANT", badge: "badge-should" },
 };
 
 const STORAGE_KEY = "barracuda_tracker_v1";
@@ -395,7 +425,7 @@ function render() {
   phasesDiv.innerHTML = "";
   let totalDone = 0, totalAll = 0, coursesDone = 0;
 
-  [1, 2, 3].forEach(phaseNum => {
+  [1, 2, 3, 4].forEach(phaseNum => {
     const info = PHASE_INFO[phaseNum];
     const phaseCourses = COURSES.filter(c => c.phase === phaseNum);
     const phaseDiv = document.createElement("div");
