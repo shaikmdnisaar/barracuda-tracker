@@ -616,14 +616,16 @@ function render() {
   document.getElementById("statEligible").className = "value " + (eligible ? "green" : "red");
   document.getElementById("statEligibleSub").textContent = `${phase1DoneCount}/${phase1Courses.length} Phase 1 done`;
 
-  // Eligibility
-  const eligEl = document.getElementById("eligibleStatus");
-  if (eligible) {
-    eligEl.textContent = "YES ✅";
-    eligEl.style.color = "var(--green)";
-  } else {
-    eligEl.textContent = `NO (${phase1DoneCount}/${phase1Courses.length} Phase 1 done)`;
-    eligEl.style.color = "var(--red)";
+  // Eligibility — update stat card only (no separate eligibleStatus element in new UI)
+  if (document.getElementById("eligibleStatus")) {
+    const eligEl = document.getElementById("eligibleStatus");
+    if (eligible) {
+      eligEl.textContent = "YES ✅";
+      eligEl.style.color = "var(--green)";
+    } else {
+      eligEl.textContent = `NO (${phase1DoneCount}/${phase1Courses.length} Phase 1 done)`;
+      eligEl.style.color = "var(--red)";
+    }
   }
 
   // Verdict
