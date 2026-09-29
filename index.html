@@ -243,7 +243,64 @@
     .readiness-score-display { flex-direction: column; align-items: flex-start; }
     .readiness-score-display .score-num { font-size: 2.5rem; }
     .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .section-rail { display: none !important; }
   }
+
+  /* Section Rail — ollasoftware.com style right-side navigation */
+  .section-rail {
+    position: fixed;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 99999;
+    opacity: 1;
+  }
+  .rail-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 1;
+    transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .rail-item:hover { gap: 10px; }
+  .rail-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--o-accent);
+    opacity: 0;
+    white-space: nowrap;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .rail-item:hover .rail-label { opacity: 1; }
+  .rail-indicator {
+    width: 18px;
+    height: 4px;
+    background: rgba(120, 120, 120, 0.45);
+    border-radius: 999px;
+    opacity: 1;
+    flex-shrink: 0;
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                height 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.3s, box-shadow 0.3s;
+  }
+  .rail-item.active .rail-indicator {
+    width: 32px;
+    height: 5px;
+    background: var(--o-accent);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+  }
+  .rail-item.active .rail-label { opacity: 1; color: var(--o-accent); }
+  .rail-item.done .rail-indicator { background: var(--green); }
+  .rail-item.done.active .rail-indicator { background: var(--green); box-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
 </style>
 </head>
 <body>
@@ -253,15 +310,18 @@
   <div class="nav-meta">Bangalore · TSE-2 · <a href="https://jobs.jobvite.com/barracuda-networks-inc/job/oN3Tzfw2/apply" target="_blank">Apply ↗</a></div>
 </nav>
 
+<!-- Section Rail — right-side scroll navigation (ollasoftware.com style) -->
+<aside class="section-rail" id="sectionRail"></aside>
+
 <!-- Hero -->
-<section class="hero">
+<section class="hero" id="hero">
   <div class="eyebrow">Job Readiness Dashboard</div>
   <h1>Crack the <span class="accent">Barracuda</span> Technical Solutions Engineer role</h1>
   <p>43 courses · 424 lessons · 5 phases · Weighted by official JD requirements</p>
 </section>
 
 <!-- Stats Row -->
-<div class="stats-row">
+<div class="stats-row" id="stats-row">
   <div class="stat-card">
     <div class="label">Readiness</div>
     <div class="value accent" id="statReadiness">0%</div>
@@ -285,7 +345,7 @@
 </div>
 
 <!-- Readiness Score -->
-<div class="readiness">
+<div class="readiness" id="readiness">
   <div class="readiness-card">
     <div class="readiness-header">
       <h2>🎯 Job Readiness Score</h2>
@@ -501,6 +561,7 @@ function render() {
     const phaseCourses = COURSES.filter(c => c.phase === phaseNum).sort((a, b) => b.weight - a.weight);
     const phaseDiv = document.createElement("div");
     phaseDiv.className = "phase";
+    phaseDiv.id = "phase-" + phaseNum;
     phaseDiv.innerHTML = `
       <div class="phase-title">
         ${info.title}
@@ -696,8 +757,93 @@ function resetProgress() {
   }
 }
 
-// Init
+// ---- Section Rail (scroll-spy navigation) ----
+function buildSectionRail() {
+  const rail = document.getElementById("sectionRail");
+  if (!rail) return;
+  rail.innerHTML = "";
+
+  // Add rail items for each phase + stats + readiness
+  const sections = [
+    { id: "hero", label: "Dashboard" },
+    { id: "stats-row", label: "Stats" },
+    { id: "readiness", label: "Readiness" },
+  ];
+
+  // Add phase sections
+  [1, 2, 3, 4, 5].forEach(phaseNum => {
+    const info = PHASE_INFO[phaseNum];
+    if (info) {
+      sections.push({ id: `phase-${phaseNum}`, label: info.label });
+    }
+  });
+
+  sections.forEach(section => {
+    const item = document.createElement("a");
+    item.className = "rail-item";
+    item.href = "#" + section.id;
+    item.dataset.section = section.id;
+    item.setAttribute("aria-label", "Scroll to " + section.label);
+    item.innerHTML = `
+      <span class="rail-label">${section.label}</span>
+      <span class="rail-indicator"></span>
+    `;
+    item.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = document.getElementById(section.id);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    rail.appendChild(item);
+  });
+}
+
+// ---- Scroll Spy ----
+function updateScrollSpy() {
+  const railItems = document.querySelectorAll(".rail-item");
+  if (railItems.length === 0) return;
+
+  // Find which section is currently in view
+  const sections = ["hero", "stats-row", "readiness", "phase-1", "phase-2", "phase-3", "phase-4", "phase-5"];
+  let activeSection = sections[0];
+  const scrollPos = window.scrollY + window.innerHeight / 3;
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const bottom = top + el.offsetHeight;
+      if (scrollPos >= top && scrollPos < bottom) {
+        activeSection = id;
+      }
+    }
+  });
+
+  // Update active state
+  railItems.forEach(item => {
+    const isActive = item.dataset.section === activeSection;
+    item.classList.toggle("active", isActive);
+
+    // Mark as done if the phase is complete
+    const section = item.dataset.section;
+    if (section && section.startsWith("phase-")) {
+      const phaseNum = parseInt(section.split("-")[1]);
+      const phaseCourses = COURSES.filter(c => c.phase === phaseNum);
+      const isCourseDone = (c) => (c.completed) || ((progress[c.name] || 0) >= c.lessons);
+      const phaseDone = phaseCourses.length > 0 && phaseCourses.every(isCourseDone);
+      item.classList.toggle("done", phaseDone);
+    }
+  });
+}
+
+// ---- Init ----
 render();
+buildSectionRail();
+updateScrollSpy();
+window.addEventListener("scroll", updateScrollSpy, { passive: true });
+window.addEventListener("resize", updateScrollSpy);
 </script>
 </body>
 </html>
