@@ -531,6 +531,73 @@
   .tp-alldone .emoji { font-size: 3rem; margin-bottom: 12px; }
   .tp-alldone .title { font-size: 1.3rem; font-weight: 800; color: var(--green); margin-bottom: 8px; }
   .tp-alldone .sub { font-size: 0.9rem; color: var(--o-mute); }
+
+  /* ===== SPACED REPETITION — Review Queue ===== */
+  .sr-review-section {
+    margin-bottom: 20px;
+  }
+  .sr-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+  }
+  .sr-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--orange);
+  }
+  .sr-badge {
+    background: rgba(249,115,22,0.15); color: var(--orange); border: 1px solid rgba(249,115,22,0.3);
+    padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 800;
+  }
+  .sr-empty {
+    padding: 16px; text-align: center; color: var(--o-faint); font-size: 0.85rem;
+    background: var(--o-bg-sunken); border-radius: var(--o-radius); border: 1px solid var(--o-line);
+  }
+  .sr-item {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(249,115,22,0.04); border: 1px solid rgba(249,115,22,0.15); border-radius: var(--o-radius);
+    padding: 14px 18px; margin-bottom: 8px; transition: all 0.2s;
+  }
+  .sr-item:hover { border-color: rgba(249,115,22,0.4); }
+  .sr-item-info { flex: 1; min-width: 0; }
+  .sr-item-course { font-size: 0.75rem; color: var(--o-faint); text-transform: uppercase; letter-spacing: 0.5px; }
+  .sr-item-name { font-size: 0.95rem; font-weight: 700; color: var(--o-ink); }
+  .sr-item-meta { font-size: 0.75rem; color: var(--o-mute); margin-top: 2px; }
+  .sr-item-meta .due { color: var(--orange); font-weight: 700; }
+  .sr-item-meta .stage { color: var(--o-accent); font-weight: 700; }
+  .sr-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .sr-btn {
+    padding: 8px 14px; border-radius: var(--o-radius-sm); border: 1px solid;
+    font-size: 0.78rem; font-weight: 700; cursor: pointer; font-family: var(--o-font-sans);
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .sr-btn.remember {
+    background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: var(--green);
+  }
+  .sr-btn.remember:hover { background: rgba(34,197,94,0.2); transform: translateY(-1px); }
+  .sr-btn.forgot {
+    background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--red);
+  }
+  .sr-btn.forgot:hover { background: rgba(239,68,68,0.2); transform: translateY(-1px); }
+  .sr-btn.review-link {
+    background: var(--o-accent-dim); border-color: var(--o-line-hi); color: var(--o-accent);
+    text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .sr-btn.review-link:hover { background: var(--o-panel-hi); }
+
+  /* SR stats bar */
+  .sr-stats {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+  }
+  .sr-stat {
+    flex: 1; min-width: 100px;
+    background: var(--o-bg-sunken); border: 1px solid var(--o-line); border-radius: var(--o-radius-sm);
+    padding: 10px 14px; text-align: center;
+  }
+  .sr-stat .num { font-size: 1.3rem; font-weight: 900; color: var(--o-ink); }
+  .sr-stat .lbl { font-size: 0.65rem; color: var(--o-faint); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .sr-stat.due .num { color: var(--orange); }
+  .sr-stat.streak .num { color: var(--green); }
 </style>
 </head>
 <body>
@@ -587,6 +654,28 @@
     </div>
     <div class="today-plan-body" id="tpBody">
       <div style="text-align:center; padding:20px; color:var(--o-mute);">Loading your plan...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SPACED REPETITION — Review due today ===== -->
+<div class="today-plan" id="reviewSection">
+  <div class="today-plan-card">
+    <div class="today-plan-header">
+      <div class="tp-left">
+        <div class="tp-icon" style="background: linear-gradient(135deg, var(--orange), #eab308);">🧠</div>
+        <div>
+          <div class="tp-title">Spaced Repetition — Revise What You Learned</div>
+          <div class="tp-date" id="srDate">Loading...</div>
+        </div>
+      </div>
+      <div class="tp-right">
+        <div class="tp-pace">Due Today</div>
+        <div class="tp-pace-val" id="srDueCount" style="color: var(--orange);">—</div>
+      </div>
+    </div>
+    <div class="today-plan-body" id="srBody">
+      <div style="text-align:center; padding:20px; color:var(--o-mute);">Loading review queue...</div>
     </div>
   </div>
 </div>
@@ -1095,6 +1184,7 @@ function toggleView() {
 // ---- Interactions ----
 function toggleLesson(courseName, lessonNum, totalLessons) {
   const current = progress[courseName] || 0;
+  const wasDone = lessonNum <= current;
   if (lessonNum <= current) {
     // uncheck this and all after
     progress[courseName] = lessonNum - 1;
@@ -1103,9 +1193,14 @@ function toggleLesson(courseName, lessonNum, totalLessons) {
     progress[courseName] = lessonNum;
   }
   saveProgress(progress);
+  // Add to spaced repetition when a lesson is newly completed
+  if (!wasDone && progress[courseName] >= lessonNum) {
+    addToSR(courseName, lessonNum);
+  }
   render();
   showNextAction();
   showTodayPlan();
+  showReviewSection();
 }
 
 function toggleLessons(courseName) {
@@ -1135,9 +1230,11 @@ function resetProgress() {
     progress = {};
     saveProgress(progress);
     localStorage.removeItem("barracuda_today_done");
+    localStorage.removeItem("barracuda_sr_v1");
     render();
     showNextAction();
     showTodayPlan();
+    showReviewSection();
     btn.dataset.armed = "false";
     btn.textContent = "Reset All Progress";
     btn.style.background = "";
@@ -1533,8 +1630,15 @@ function openTodayLesson(courseName, lessonNum) {
   if (!course) return;
   const url = (course.lessonUrls && course.lessonUrls[lessonNum - 1]) ? course.lessonUrls[lessonNum - 1] : course.url;
   markTodayDone(courseName + "-" + lessonNum);
+  // Also mark progress and add to spaced repetition
+  const current = progress[courseName] || 0;
+  if (lessonNum > current) {
+    progress[courseName] = lessonNum;
+    saveProgress(progress);
+    addToSR(courseName, lessonNum);
+  }
   window.open(url, "_blank");
-  setTimeout(showTodayPlan, 300);
+  setTimeout(() => { showTodayPlan(); showReviewSection(); }, 300);
 }
 
 // Auto-scroll to Today's Plan on page open
@@ -1550,6 +1654,174 @@ function autoStartToday() {
   }, 1000);
 }
 
+// ===== SPACED REPETITION — Review engine =====
+const SR_KEY = "barracuda_sr_v1";
+const SR_INTERVALS = [1, 3, 7, 14, 30, 90]; // days between reviews
+
+function loadSR() {
+  try { return JSON.parse(localStorage.getItem(SR_KEY) || "{}"); }
+  catch { return {}; }
+}
+function saveSR(data) {
+  localStorage.setItem(SR_KEY, JSON.stringify(data));
+}
+
+// When a lesson is completed, add it to the SR queue
+function addToSR(courseName, lessonNum) {
+  const sr = loadSR();
+  const key = courseName + "|L" + lessonNum;
+  if (!sr[key]) {
+    sr[key] = {
+      course: courseName,
+      lesson: lessonNum,
+      stage: 0, // index into SR_INTERVALS
+      lastReview: new Date().toDateString(),
+      nextReview: new Date(Date.now() + SR_INTERVALS[0] * 86400000).toDateString(),
+      reviewCount: 0,
+    };
+    saveSR(sr);
+  }
+}
+
+// Get all lessons due for review today
+function getDueReviews() {
+  const sr = loadSR();
+  const today = new Date().toDateString();
+  const due = [];
+  for (const [key, item] of Object.entries(sr)) {
+    const reviewDate = new Date(item.nextReview);
+    const todayDate = new Date(today);
+    if (reviewDate <= todayDate) {
+      due.push({ key, ...item });
+    }
+  }
+  // Sort by stage descending (older/more established first) then by course
+  due.sort((a, b) => b.stage - a.stage || a.course.localeCompare(b.course));
+  return due;
+}
+
+// Mark a review as "still remember" — advance to next interval
+function srRemember(key) {
+  const sr = loadSR();
+  if (!sr[key]) return;
+  const item = sr[key];
+  item.stage = Math.min(item.stage + 1, SR_INTERVALS.length - 1);
+  item.reviewCount = (item.reviewCount || 0) + 1;
+  item.lastReview = new Date().toDateString();
+  item.nextReview = new Date(Date.now() + SR_INTERVALS[item.stage] * 86400000).toDateString();
+  saveSR(sr);
+  showReviewSection();
+}
+
+// Mark a review as "forgot" — reset to stage 0 (review tomorrow)
+function srForgot(key) {
+  const sr = loadSR();
+  if (!sr[key]) return;
+  const item = sr[key];
+  item.stage = 0;
+  item.lastReview = new Date().toDateString();
+  item.nextReview = new Date(Date.now() + SR_INTERVALS[0] * 86400000).toDateString();
+  saveSR(sr);
+  showReviewSection();
+}
+
+// Get SR stats
+function getSRStats() {
+  const sr = loadSR();
+  const today = new Date().toDateString();
+  let total = 0, due = 0, mastered = 0;
+  for (const item of Object.values(sr)) {
+    total++;
+    if (new Date(item.nextReview) <= new Date(today)) due++;
+    if (item.stage >= SR_INTERVALS.length - 1) mastered++;
+  }
+  return { total, due, mastered };
+}
+
+// Render the review section
+function showReviewSection() {
+  const body = document.getElementById("srBody");
+  const dueCountEl = document.getElementById("srDueCount");
+  const dateEl = document.getElementById("srDate");
+  if (!body) return;
+
+  const now = new Date();
+  if (dateEl) dateEl.textContent = now.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+
+  const due = getDueReviews();
+  const stats = getSRStats();
+  if (dueCountEl) dueCountEl.textContent = due.length;
+
+  if (due.length === 0 && stats.total === 0) {
+    body.innerHTML = `
+      <div class="sr-empty">
+        🌱 No reviews yet. As you complete lessons, they'll appear here for revision.<br>
+        <span style="font-size:0.78rem; color:var(--o-faint);">First review comes 1 day after you learn a lesson. Then 3, 7, 14, 30, 90 days.</span>
+      </div>`;
+    return;
+  }
+
+  if (due.length === 0) {
+    body.innerHTML = `
+      <div class="sr-stats">
+        <div class="sr-stat"><div class="num">${stats.total}</div><div class="lbl">In Review Queue</div></div>
+        <div class="sr-stat due"><div class="num">0</div><div class="lbl">Due Today</div></div>
+        <div class="sr-stat streak"><div class="num">${stats.mastered}</div><div class="lbl">Mastered (90d)</div></div>
+      </div>
+      <div class="sr-empty">✅ All caught up! No reviews due today. Come back tomorrow or complete more lessons to add to your review queue.</div>`;
+    return;
+  }
+
+  // Build stats bar
+  let statsHTML = `
+    <div class="sr-stats">
+      <div class="sr-stat"><div class="num">${stats.total}</div><div class="lbl">In Review Queue</div></div>
+      <div class="sr-stat due"><div class="num">${due.length}</div><div class="lbl">Due Today</div></div>
+      <div class="sr-stat streak"><div class="num">${stats.mastered}</div><div class="lbl">Mastered (90d)</div></div>
+    </div>`;
+
+  // Build review items
+  let itemsHTML = "";
+  due.forEach(item => {
+    const course = COURSES.find(c => c.name === item.course);
+    const lessonUrl = (course && course.lessonUrls && course.lessonUrls[item.lesson - 1])
+      ? course.lessonUrls[item.lesson - 1] : (course ? course.url : "#");
+    const stageName = ["1 day", "3 days", "7 days", "14 days", "30 days", "90 days"][item.stage];
+    const nextStageName = item.stage < SR_INTERVALS.length - 1
+      ? ["1 day", "3 days", "7 days", "14 days", "30 days", "90 days"][item.stage + 1] : "90 days";
+    const daysOverdue = Math.floor((Date.now() - new Date(item.nextReview)) / 86400000);
+
+    itemsHTML += `
+      <div class="sr-item">
+        <div class="sr-item-info">
+          <div class="sr-item-course">${item.course} · Lesson ${item.lesson}</div>
+          <div class="sr-item-name">📖 Revise: ${item.course} — L${item.lesson}</div>
+          <div class="sr-item-meta">
+            <span class="stage">Stage ${item.stage + 1}/6</span> · Last: ${stageName} ago ·
+            ${daysOverdue > 0 ? `<span class="due">${daysOverdue}d overdue</span>` : "Due today"} ·
+            Next: ${nextStageName}
+          </div>
+        </div>
+        <div class="sr-actions">
+          <a class="sr-btn review-link" href="${lessonUrl}" target="_blank">▶ Re-watch</a>
+          <button class="sr-btn forgot" onclick="srForgot('${item.key}')">😕 Forgot</button>
+          <button class="sr-btn remember" onclick="srRemember('${item.key}')">✓ Remember</button>
+        </div>
+      </div>`;
+  });
+
+  body.innerHTML = `
+    ${statsHTML}
+    <div class="sr-review-section">
+      <div class="sr-header">
+        <div class="sr-title">🔄 Revise These Today — Don't Let Them Fade</div>
+        <span class="sr-badge">${due.length} due</span>
+      </div>
+      ${itemsHTML}
+    </div>
+  `;
+}
+
 // ---- Init ----
 render();
 buildSectionRail();
@@ -1558,6 +1830,7 @@ showStreak();
 showDailyQuote();
 showNextAction();
 showTodayPlan();
+showReviewSection();
 autoStartToday();
 window.addEventListener("scroll", updateScrollSpy, { passive: true });
 window.addEventListener("resize", updateScrollSpy);
