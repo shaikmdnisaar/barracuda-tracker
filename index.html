@@ -67,10 +67,11 @@
 
   /* Hero — ollasoftware style */
   .hero {
-    padding: 60px 24px 40px;
+    padding: 70px 24px 50px;
     text-align: center;
-    background: var(--o-bg);
+    background: radial-gradient(ellipse at 50% 0%, rgba(56,189,248,0.08), transparent 60%), var(--o-bg);
     border-bottom: 1px solid var(--o-line);
+    position: relative;
   }
   .hero .eyebrow {
     font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
@@ -82,6 +83,89 @@
   }
   .hero h1 .accent { color: var(--o-accent); }
   .hero p { color: var(--o-mute); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+
+  /* Streak badge */
+  .streak-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15));
+    border: 1px solid rgba(249,115,22,0.3); border-radius: 999px;
+    padding: 8px 18px; margin-bottom: 20px; font-weight: 800; font-size: 0.95rem;
+    color: var(--orange); animation: pulse-glow 2.5s ease-in-out infinite;
+  }
+  .streak-badge .flame { font-size: 1.2rem; }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.3); }
+    50% { box-shadow: 0 0 20px 4px rgba(249,115,22,0.15); }
+  }
+
+  /* Start Today CTA */
+  .cta-row {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-top: 28px;
+  }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 32px; border-radius: var(--o-radius); border: none;
+    font-size: 1.05rem; font-weight: 800; font-family: var(--o-font-sans);
+    cursor: pointer; transition: all 0.2s; text-decoration: none;
+  }
+  .cta-btn.primary {
+    background: linear-gradient(135deg, var(--o-accent), var(--o-accent-2));
+    color: #fff; box-shadow: 0 4px 20px rgba(56,189,248,0.3);
+  }
+  .cta-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(56,189,248,0.45); }
+  .cta-btn.secondary {
+    background: var(--o-panel); color: var(--o-ink); border: 1px solid var(--o-line);
+  }
+  .cta-btn.secondary:hover { border-color: var(--o-accent); color: var(--o-accent); }
+  .cta-btn .arrow { font-size: 1.2rem; transition: transform 0.2s; }
+  .cta-btn:hover .arrow { transform: translateX(4px); }
+
+  /* Daily quote */
+  .daily-quote {
+    max-width: 700px; margin: 28px auto 0; padding: 16px 24px;
+    background: var(--o-panel); border: 1px solid var(--o-line); border-radius: var(--o-radius);
+    border-left: 3px solid var(--o-accent);
+    font-size: 0.95rem; color: var(--o-mute); font-style: italic;
+    text-align: left;
+  }
+  .daily-quote .q-mark { font-size: 1.5rem; color: var(--o-accent); margin-right: 6px; vertical-align: -3px; }
+  .daily-quote strong { color: var(--o-ink); font-style: normal; }
+
+  /* Next Action card */
+  .next-action {
+    max-width: 1100px; margin: 0 auto 24px; padding: 0 24px;
+  }
+  .next-action-card {
+    background: linear-gradient(135deg, rgba(56,189,248,0.08), rgba(37,99,235,0.05));
+    border: 1px solid var(--o-line-hi); border-radius: var(--o-radius-lg);
+    padding: 24px 28px; display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap; transition: all 0.2s;
+  }
+  .next-action-card:hover { border-color: var(--o-accent); transform: translateY(-1px); }
+  .next-action-left { flex: 1; min-width: 250px; }
+  .next-action-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--o-accent); margin-bottom: 6px;
+  }
+  .next-action-title { font-size: 1.3rem; font-weight: 800; color: var(--o-ink); margin-bottom: 4px; }
+  .next-action-sub { font-size: 0.85rem; color: var(--o-mute); }
+  .next-action-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 24px; border-radius: var(--o-radius); border: none;
+    background: linear-gradient(135deg, var(--o-accent), var(--o-accent-2));
+    color: #fff; font-weight: 800; font-size: 0.95rem; font-family: var(--o-font-sans);
+    cursor: pointer; text-decoration: none; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .next-action-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(56,189,248,0.4); }
+
+  /* Day counter */
+  .day-counter {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.8rem; color: var(--o-faint); margin-top: 8px;
+  }
+  .day-counter .num { color: var(--o-accent); font-weight: 800; }
 
   /* Stats row — ollasoftware card grid */
   .stats-row {
@@ -337,10 +421,29 @@
 
 <!-- Hero -->
 <section class="hero" id="hero">
+  <div class="streak-badge" id="streakBadge"><span class="flame">🔥</span> <span id="streakText">Day 1 — Let's go!</span></div>
   <div class="eyebrow">Job Readiness Dashboard</div>
   <h1>Crack the <span class="accent">Barracuda</span> Technical Solutions Engineer role</h1>
   <p>61 courses · 600+ lessons · 6 phases · Weighted by official JD requirements</p>
+  <div class="cta-row">
+    <a class="cta-btn primary" id="heroStartBtn" href="#readiness"><span>🚀 Start Learning Today</span><span class="arrow">→</span></a>
+    <a class="cta-btn secondary" href="https://jobs.jobvite.com/barracuda-networks-inc/job/oN3Tzfw2/apply" target="_blank"><span>📋 View Job Description</span></a>
+  </div>
+  <div class="daily-quote" id="dailyQuote"><span class="q-mark">“</span><span id="quoteText">Loading today's motivation...</span></div>
 </section>
+
+<!-- Next Action -->
+<div class="next-action" id="nextAction">
+  <div class="next-action-card" id="nextActionCard">
+    <div class="next-action-left">
+      <div class="next-action-label">▶ Your Next Move</div>
+      <div class="next-action-title" id="nextActionTitle">Loading...</div>
+      <div class="next-action-sub" id="nextActionSub"></div>
+      <div class="day-counter" id="dayCounter"></div>
+    </div>
+    <a class="next-action-btn" id="nextActionBtn" href="#phase-1"><span>Open & Learn</span> <span class="arrow">→</span></a>
+  </div>
+</div>
 
 <!-- Stats Row -->
 <div class="stats-row" id="stats-row">
@@ -855,6 +958,7 @@ function toggleLesson(courseName, lessonNum, totalLessons) {
   }
   saveProgress(progress);
   render();
+  showNextAction();
 }
 
 function toggleLessons(courseName) {
@@ -965,10 +1069,125 @@ function updateScrollSpy() {
   });
 }
 
+// ---- Motivation: Streak, Quote, Next Action ----
+const QUOTES = [
+  "The expert in anything was once a beginner. <strong>Start today.</strong>",
+  "You don't have to be great to start, but you have to start to be great. <strong>One lesson at a time.</strong>",
+  "Barracuda is hiring. Someone is going to get that job. <strong>Why not you?</strong>",
+  "Every lesson you finish is one step closer to Bangalore. <strong>Keep moving.</strong>",
+  "Discipline is choosing what you want most over what you want now. <strong>Open the next lesson.</strong>",
+  "The job won't wait. The competition isn't resting. <strong>Neither should you.</strong>",
+  "You are 653 lessons away from a career. That's nothing. <strong>Start counting down.</strong>",
+  "Success is the sum of small efforts repeated day in and day out. <strong>Today is one of those days.</strong>",
+  "Your future self is watching you right now. <strong>Make them proud.</strong>",
+  "The only way to lose is to stop. <strong>You're still here. Keep going.</strong>",
+  "Phase 1 is the door. Everything else is the room. <strong>Open the door today.</strong>",
+  "CCNA done. CCNP started. Barracuda next. <strong>The path is clear.</strong>",
+];
+
+function loadStreak() {
+  const STREAK_KEY = "barracuda_streak";
+  let streak = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+
+  if (streak.lastVisit === today) {
+    // Already visited today — keep streak
+  } else if (streak.lastVisit === yesterday) {
+    streak.count = (streak.count || 0) + 1;
+    streak.lastVisit = today;
+  } else {
+    streak.count = 1;
+    streak.lastVisit = today;
+  }
+  localStorage.setItem(STREAK_KEY, JSON.stringify(streak));
+  return streak.count;
+}
+
+function showStreak() {
+  const count = loadStreak();
+  const el = document.getElementById("streakText");
+  if (!el) return;
+  if (count === 1) el.textContent = "Day 1 — Let's go!";
+  else if (count < 7) el.textContent = `Day ${count} — Building momentum! 🔥`;
+  else if (count < 30) el.textContent = `Day ${count} — You're on fire! 🔥🔥`;
+  else el.textContent = `Day ${count} — Unstoppable! 🔥🔥🔥`;
+}
+
+function showDailyQuote() {
+  const el = document.getElementById("quoteText");
+  if (!el) return;
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  const quote = QUOTES[dayOfYear % QUOTES.length];
+  el.innerHTML = quote;
+}
+
+function showNextAction() {
+  const isCourseDone = (c) => (c.completed) || ((progress[c.name] || 0) >= c.lessons);
+  // Find the highest-weight incomplete course
+  const next = [...COURSES].filter(c => !isCourseDone(c)).sort((a,b) => b.weight - a.weight)[0];
+  const titleEl = document.getElementById("nextActionTitle");
+  const subEl = document.getElementById("nextActionSub");
+  const btnEl = document.getElementById("nextActionBtn");
+  const dayEl = document.getElementById("dayCounter");
+  if (!titleEl) return;
+
+  if (next) {
+    const done = progress[next.name] || 0;
+    const remaining = next.lessons - done;
+    titleEl.textContent = next.name;
+    subEl.innerHTML = `⭐ ${next.weight}% weight · ${remaining} lesson${remaining !== 1 ? "s" : ""} to go · Phase ${next.phase}`;
+    btnEl.href = next.url;
+    btnEl.target = "_blank";
+    btnEl.querySelector("span").textContent = "Open Course →";
+
+    // Days until a target (e.g., 90 days from first visit)
+    const STREAK_KEY = "barracuda_streak";
+    let streak = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    if (!streak.firstVisit) {
+      streak.firstVisit = new Date().toDateString();
+      localStorage.setItem(STREAK_KEY, JSON.stringify(streak));
+    }
+    const firstDate = new Date(streak.firstVisit);
+    const daysSince = Math.floor((Date.now() - firstDate) / 86400000) + 1;
+    dayEl.innerHTML = `📅 Day <span class="num">${daysSince}</span> of your Barracuda journey`;
+
+    // Make hero "Start Learning" button scroll to this course
+    const heroBtn = document.getElementById("heroStartBtn");
+    if (heroBtn) {
+      heroBtn.onclick = (e) => {
+        e.preventDefault();
+        // Switch to phase view and scroll to the course's phase
+        if (currentView !== "phase") { currentView = "phase"; render(); }
+        const phaseEl = document.getElementById("phase-" + next.phase);
+        if (phaseEl) {
+          phaseEl.scrollIntoView({ behavior: "smooth", block: "start" });
+          // Auto-expand the course's lessons after scroll
+          setTimeout(() => {
+            const lessonsEl = document.getElementById("lessons-" + next.name);
+            if (lessonsEl) lessonsEl.classList.add("open");
+            const card = document.querySelector(`[data-course="${next.name}"]`);
+            if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 600);
+        }
+      };
+    }
+  } else {
+    titleEl.textContent = "🎉 All courses complete!";
+    subEl.textContent = "You're fully prepared. Go get that offer.";
+    btnEl.href = "https://jobs.jobvite.com/barracuda-networks-inc/job/oN3Tzfw2/apply";
+    btnEl.target = "_blank";
+    btnEl.querySelector("span").textContent = "Apply Now →";
+  }
+}
+
 // ---- Init ----
 render();
 buildSectionRail();
 updateScrollSpy();
+showStreak();
+showDailyQuote();
+showNextAction();
 window.addEventListener("scroll", updateScrollSpy, { passive: true });
 window.addEventListener("resize", updateScrollSpy);
 </script>
