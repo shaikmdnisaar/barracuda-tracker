@@ -601,8 +601,8 @@
 
   /* ===== QUIZ MODAL — Check understanding ===== */
   .quiz-overlay {
-    position: fixed; inset: 0; z-index: 100000;
-    background: rgba(5,8,16,0.85); backdrop-filter: blur(8px);
+    position: fixed; inset: 0; z-index: 100002;
+    background: rgba(5,8,16,0.95); backdrop-filter: blur(12px);
     display: none; align-items: center; justify-content: center;
     padding: 20px; animation: fadeIn 0.3s ease;
   }
@@ -620,6 +620,13 @@
     cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 6px;
   }
   .quiz-close:hover { color: var(--o-ink); background: var(--o-bg-sunken); }
+  .quiz-pause-banner {
+    background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.3); border-radius: var(--o-radius-sm);
+    padding: 10px 16px; margin-bottom: 16px; text-align: center;
+    font-size: 0.85rem; font-weight: 700; color: var(--orange);
+    display: none;
+  }
+  .quiz-pause-banner.show { display: block; animation: fadeIn 0.3s ease; }
   .quiz-header {
     display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
   }
@@ -844,7 +851,6 @@
 <!-- ===== QUIZ MODAL ===== -->
 <div class="quiz-overlay" id="quizOverlay">
   <div class="quiz-card" id="quizCard">
-    <button class="quiz-close" onclick="closeQuiz()">✕</button>
     <div class="quiz-header">
       <div class="quiz-icon">🧪</div>
       <div>
@@ -852,6 +858,7 @@
         <div class="quiz-subtitle" id="quizSubtitle">Let's see what you learned</div>
       </div>
     </div>
+    <div class="quiz-pause-banner" id="quizPauseBanner">⏸️ Video paused — answer to resume</div>
     <div class="quiz-progress" id="quizProgress"></div>
     <div class="quiz-question" id="quizQuestion">Loading...</div>
     <div class="quiz-options" id="quizOptions"></div>
@@ -1998,11 +2005,39 @@ function startQuizForCourse(courseName, interviewHotOnly) {
     answered: 0,
     correct: 0,
     active: true,
+    fromVideo: !!videoPlayerState.course, // track if quiz came from video player
   };
+
+  // PAUSE the video — hide the video overlay
+  pauseVideoForQuiz();
 
   showQuizQuestion();
   // Play a notification sound to grab attention
   playQuizSound();
+}
+
+// Pause video — hide the video overlay so quiz takes over
+function pauseVideoForQuiz() {
+  const videoOverlay = document.getElementById("videoOverlay");
+  if (videoOverlay && videoOverlay.classList.contains("show")) {
+    videoOverlay.style.display = "none"; // hide but don't remove state
+    // Show pause banner on quiz
+    const banner = document.getElementById("quizPauseBanner");
+    if (banner) banner.classList.add("show");
+  }
+}
+
+// Resume video — show the video overlay again after quiz
+function resumeVideoAfterQuiz() {
+  const videoOverlay = document.getElementById("videoOverlay");
+  if (videoOverlay && videoPlayerState.course) {
+    videoOverlay.style.display = ""; // restore
+    // Update status to show quiz is done
+    const statusEl = document.getElementById("videoQuizStatus");
+    if (statusEl) statusEl.innerHTML = "✅ Quiz complete — keep watching!";
+    const subtitleEl = document.getElementById("videoPlayerSubtitle");
+    if (subtitleEl) subtitleEl.textContent = "📺 Video resumed — keep learning!";
+  }
 }
 
 function showQuizQuestion() {
@@ -2098,31 +2133,57 @@ function nextQuizQuestion() {
     showQuizQuestion();
   } else {
     // Quiz complete
-    closeQuiz();
-    // Show completion summary
     const pct = Math.round((quizState.correct / quizState.questions.length) * 100);
     const msg = pct >= 80 ? "🎉 Excellent! You've got this topic down." :
                 pct >= 50 ? "👍 Decent — review the material and try again." :
                 "📚 Keep learning — re-watch the lesson and retry.";
     const overlay = document.getElementById("quizOverlay");
     const card = document.getElementById("quizCard");
+    const wasFromVideo = quizState.fromVideo;
     card.innerHTML = `
-      <button class="quiz-close" onclick="closeQuiz()">✕</button>
       <div style="text-align:center; padding:20px;">
         <div style="font-size:3rem; margin-bottom:12px;">${pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "📚"}</div>
         <div style="font-size:1.4rem; font-weight:800; color:var(--o-ink); margin-bottom:8px;">Quiz Complete!</div>
         <div style="font-size:1.1rem; color:var(--o-accent); font-weight:800; margin-bottom:12px;">${quizState.correct}/${quizState.questions.length} correct (${pct}%)</div>
         <div style="color:var(--o-mute); margin-bottom:20px;">${msg}</div>
-        <button class="quiz-btn quiz-btn-primary" onclick="closeQuiz()">Continue Learning →</button>
+        <button class="quiz-btn quiz-btn-primary" onclick="finishQuizAndResume()">${wasFromVideo ? "▶ Resume Video →" : "Continue Learning →"}</button>
       </div>`;
     overlay.classList.add("show");
     quizState.active = false;
   }
 }
 
+// Finish quiz — close quiz overlay and resume video if it was playing
+function finishQuizAndResume() {
+  closeQuiz();
+  if (quizState.fromVideo) {
+    resumeVideoAfterQuiz();
+  }
+}
+
 function closeQuiz() {
   const overlay = document.getElementById("quizOverlay");
   if (overlay) overlay.classList.remove("show");
+  // Restore the quiz card HTML for next time (in case it was replaced by completion screen)
+  const card = document.getElementById("quizCard");
+  if (card) {
+    card.innerHTML = `
+      <div class="quiz-header">
+        <div class="quiz-icon">🧪</div>
+        <div>
+          <div class="quiz-title" id="quizTitle">Quick Check</div>
+          <div class="quiz-subtitle" id="quizSubtitle">Let's see what you learned</div>
+        </div>
+      </div>
+      <div class="quiz-pause-banner" id="quizPauseBanner">⏸️ Video paused — answer to resume</div>
+      <div class="quiz-progress" id="quizProgress"></div>
+      <div class="quiz-question" id="quizQuestion">Loading...</div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-actions" id="quizActions" style="display:none;">
+        <button class="quiz-btn quiz-btn-primary" id="quizNextBtn" onclick="nextQuizQuestion()">Next →</button>
+      </div>`;
+  }
   quizState.active = false;
 }
 
