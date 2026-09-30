@@ -60,7 +60,10 @@
   .nav-meta { font-size: 0.8rem; color: var(--o-mute); }
   .nav-meta a { color: var(--o-accent); text-decoration: none; }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px 0 24px; }
+  @media (min-width: 1000px) {
+    .container { padding-right: 180px; }
+  }
 
   /* Hero — ollasoftware style */
   .hero {
@@ -382,6 +385,7 @@
 
 <!-- Controls -->
 <div class="controls">
+  <button class="btn" id="viewToggleBtn" onclick="toggleView()">📊 Priority View</button>
   <button class="btn" onclick="toggleAllLessons()">Expand/Collapse All</button>
   <button class="btn btn-danger" onclick="resetProgress()">Reset All Progress</button>
 </div>
@@ -623,86 +627,54 @@ function saveProgress(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 let progress = loadProgress();
+let currentView = "phase"; // "phase" or "priority"
 
 // ---- Render ----
 function render() {
   const phasesDiv = document.getElementById("phases");
   phasesDiv.innerHTML = "";
-  let totalDone = 0, totalAll = 0, coursesDone = 0;
 
-  [1, 2, 3, 4, 5, 6].forEach(phaseNum => {
-    const info = PHASE_INFO[phaseNum];
-    const phaseCourses = COURSES.filter(c => c.phase === phaseNum).sort((a, b) => b.weight - a.weight);
+  if (currentView === "priority") {
+    // GLOBAL PRIORITY VIEW — all courses sorted by weight (highest first)
+    const allCourses = [...COURSES].sort((a, b) => b.weight - a.weight);
     const phaseDiv = document.createElement("div");
     phaseDiv.className = "phase";
-    phaseDiv.id = "phase-" + phaseNum;
+    phaseDiv.id = "phase-priority";
     phaseDiv.innerHTML = `
       <div class="phase-title">
-        ${info.title}
-        <span class="phase-badge ${info.badge}">${info.label}</span>
+        📊 Priority View — All courses by weight (highest first)
+        <span class="phase-badge badge-must">SORTED</span>
       </div>
     `;
-
-    phaseCourses.forEach((course, idx) => {
-      const cKey = course.name;
-      // If marked completed on NHPREP, show as fully done
-      const done = course.completed ? course.lessons : (progress[cKey] || 0);
-      const allDone = done >= course.lessons;
-      if (allDone) coursesDone++;
-      totalDone += done;
-      totalAll += course.lessons;
-      const pct = Math.round((done / course.lessons) * 100);
-
-      const card = document.createElement("div");
-      card.className = "course" + (allDone ? " done" : "");
-      card.dataset.course = cKey;
-
-      let lessonsHTML = "";
-      for (let i = 1; i <= course.lessons; i++) {
-        const checked = i <= done ? "checked" : "";
-        const lessonUrl = (course.lessonUrls && course.lessonUrls[i - 1]) ? course.lessonUrls[i - 1] : course.url;
-        lessonsHTML += `
-          <div class="lesson ${checked}" data-lesson="${i}">
-            <input type="checkbox" id="${cKey}-${i}" ${checked} onchange="toggleLesson('${cKey}', ${i}, ${course.lessons})">
-            <a href="${lessonUrl}" target="_blank" class="lesson-link" title="Open lesson ${i} video">L${i} ▶</a>
-          </div>`;
-      }
-
-      // Build connected labs HTML
-      let labsHTML = "";
-      if (course.labs && course.labs.length > 0) {
-        labsHTML = `<div class="connected-labs" id="labs-${cKey}"><div class="labs-label">🔧 Connected Labs (${course.labs.length})</div>`;
-        course.labs.forEach(lab => {
-          const [labName, labUrl] = lab.split("|");
-          labsHTML += `<div class="lab-chip"><a href="https://nhprep.com${labUrl}" target="_blank">${labName} ↗</a></div>`;
-        });
-        labsHTML += `</div>`;
-      }
-
-      card.innerHTML = `
-        <div class="course-header" onclick="toggleLessons('${cKey}')">
-          <div class="course-name">
-            ${course.name}
-            <span class="why">📌 ${course.why}</span>
-          </div>
-          <div class="course-meta">
-            <a href="${course.url}" target="_blank" style="color:var(--o-accent);text-decoration:none;font-size:0.8rem;">Open course ↗</a><br>
-            <span class="pct">${pct}%</span><br>
-            <span>${done}/${course.lessons} lessons</span><br>
-            <span style="font-size:0.75rem; color:var(--o-accent); font-weight:700;">⭐ ${course.weight}% weight</span>
-            ${course.labs && course.labs.length > 0 ? `<br><span style="font-size:0.7rem; color:var(--o-mute);">🔧 ${course.labs.length} labs</span>` : ""}
-          </div>
-        </div>
-        <div class="course-bar"><div class="course-bar-fill" style="width:${pct}%"></div></div>
-        <div class="lessons" id="lessons-${cKey}">${lessonsHTML}</div>
-        ${labsHTML}
-      `;
-      phaseDiv.appendChild(card);
-    });
+    allCourses.forEach((course) => renderCourse(course, phaseDiv));
     phasesDiv.appendChild(phaseDiv);
-  });
+  } else {
+    // PHASE VIEW — grouped by phase, sorted by weight within each phase
+    [1, 2, 3, 4, 5, 6].forEach(phaseNum => {
+      const info = PHASE_INFO[phaseNum];
+      const phaseCourses = COURSES.filter(c => c.phase === phaseNum).sort((a, b) => b.weight - a.weight);
+      const phaseDiv = document.createElement("div");
+      phaseDiv.className = "phase";
+      phaseDiv.id = "phase-" + phaseNum;
+      phaseDiv.innerHTML = `
+        <div class="phase-title">
+          ${info.title}
+          <span class="phase-badge ${info.badge}">${info.label}</span>
+        </div>
+      `;
+      phaseCourses.forEach((course) => renderCourse(course, phaseDiv));
+      phasesDiv.appendChild(phaseDiv);
+    });
+  }
 
-  // Overall stats — update stat cards
+  // Overall stats — computed from COURSES directly (view-independent)
+  let totalDone = 0, totalAll = 0, coursesDone = 0;
+  COURSES.forEach(c => {
+    const done = c.completed ? c.lessons : (progress[c.name] || 0);
+    totalDone += done;
+    totalAll += c.lessons;
+    if (done >= c.lessons) coursesDone++;
+  });
   document.getElementById("statLessons").textContent = `${totalDone}/${totalAll}`;
   document.getElementById("statCourses").textContent = `${coursesDone}/${COURSES.length}`;
   const overallPct = Math.round((totalDone / totalAll) * 100);
@@ -807,6 +779,68 @@ function render() {
   document.getElementById("milestoneApply").classList.toggle("show", phase1Done && !allDone);
   document.getElementById("milestoneInterview").classList.toggle("show", phase2Done && !allDone);
   document.getElementById("milestoneFull").classList.toggle("show", allDone);
+}
+
+// ---- Course renderer (shared by phase & priority views) ----
+function renderCourse(course, container) {
+  const cKey = course.name;
+  const done = course.completed ? course.lessons : (progress[cKey] || 0);
+  const allDone = done >= course.lessons;
+  const pct = Math.round((done / course.lessons) * 100);
+
+  const card = document.createElement("div");
+  card.className = "course" + (allDone ? " done" : "");
+  card.dataset.course = cKey;
+
+  let lessonsHTML = "";
+  for (let i = 1; i <= course.lessons; i++) {
+    const checked = i <= done ? "checked" : "";
+    const lessonUrl = (course.lessonUrls && course.lessonUrls[i - 1]) ? course.lessonUrls[i - 1] : course.url;
+    lessonsHTML += `
+      <div class="lesson ${checked}" data-lesson="${i}">
+        <input type="checkbox" id="${cKey}-${i}" ${checked} onchange="toggleLesson('${cKey}', ${i}, ${course.lessons})">
+        <a href="${lessonUrl}" target="_blank" class="lesson-link" title="Open lesson ${i} video">L${i} ▶</a>
+      </div>`;
+  }
+
+  let labsHTML = "";
+  if (course.labs && course.labs.length > 0) {
+    labsHTML = `<div class="connected-labs" id="labs-${cKey}"><div class="labs-label">🔧 Connected Labs (${course.labs.length})</div>`;
+    course.labs.forEach(lab => {
+      const [labName, labUrl] = lab.split("|");
+      labsHTML += `<div class="lab-chip"><a href="https://nhprep.com${labUrl}" target="_blank">${labName} ↗</a></div>`;
+    });
+    labsHTML += `</div>`;
+  }
+
+  const phaseTag = `<span style="font-size:0.65rem; color:var(--o-faint); background:var(--o-bg-sunken); padding:2px 8px; border-radius:10px; margin-left:8px;">P${course.phase}</span>`;
+
+  card.innerHTML = `
+    <div class="course-header" onclick="toggleLessons('${cKey}')">
+      <div class="course-name">
+        ${course.name}${currentView === "priority" ? phaseTag : ""}
+        <span class="why">📌 ${course.why}</span>
+      </div>
+      <div class="course-meta">
+        <a href="${course.url}" target="_blank" style="color:var(--o-accent);text-decoration:none;font-size:0.8rem;">Open course ↗</a><br>
+        <span class="pct">${pct}%</span><br>
+        <span>${done}/${course.lessons} lessons</span><br>
+        <span style="font-size:0.75rem; color:var(--o-accent); font-weight:700;">⭐ ${course.weight}% weight</span>
+        ${course.labs && course.labs.length > 0 ? `<br><span style="font-size:0.7rem; color:var(--o-mute);">🔧 ${course.labs.length} labs</span>` : ""}
+      </div>
+    </div>
+    <div class="course-bar"><div class="course-bar-fill" style="width:${pct}%"></div></div>
+    <div class="lessons" id="lessons-${cKey}">${lessonsHTML}</div>
+    ${labsHTML}
+  `;
+  container.appendChild(card);
+}
+
+function toggleView() {
+  currentView = currentView === "phase" ? "priority" : "phase";
+  const btn = document.getElementById("viewToggleBtn");
+  btn.textContent = currentView === "phase" ? "📊 Priority View" : "📁 Phase View";
+  render();
 }
 
 // ---- Interactions ----
