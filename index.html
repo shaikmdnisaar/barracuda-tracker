@@ -441,6 +441,12 @@ const COURSES = [
       "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/end-to-end",
       "https://nhprep.com/course/ccna-lab-22-troubleshooting-methodology/lesson/multi-layer-challenge"
     ]},
+  { phase: 2, name: "BUG BOUNTY HUNTING", lessons: 28, why: "Web App Security / OWASP Top 10 — Barracuda WAF role", badge: "should", url: "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj", weight: 8, completed: false,
+    lessonUrls: [
+      "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj/lesson/day-01-bug-bounty-hunting-fundamental-concepts-and-course-modules-overviewmp4",
+      "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj/lesson/day-02-bug-bounty-plateform-with-bug-bounty-hunter-need-to-know-conceptsmp4",
+      null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+    ]},
   { phase: 2, name: "ASA BY Mr.SUSHIL", lessons: 19, why: "Cisco ASA firewall — strengthens firewall + security depth", badge: "should", url: "https://nhprep.com/course/asa-by-mrsushil", weight: 7, completed: false,
     labs: ["Lab 21: ASA Firewall Basics|/course/ccnp-sec-lab-01-asa-firewall-basics","Lab 22: ASA NAT|/course/ccnp-sec-lab-02-asa-nat","Lab 23: ASA Access Control & Inspection|/course/ccnp-sec-lab-03-asa-access-control","Lab 29: TACACS+ & AAA|/course/ccnp-sec-lab-09-tacacs-aaa"],
     lessonUrls: [
@@ -449,12 +455,8 @@ const COURSES = [
       "https://nhprep.com/course/asa-by-mrsushil/lesson/0204-6mp4",
       null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
     ]},
-  { phase: 2, name: "BUG BOUNTY HUNTING", lessons: 28, why: "Web App Security / OWASP Top 10 — Barracuda WAF role", badge: "should", url: "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj", weight: 8, completed: false,
-    lessonUrls: [
-      "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj/lesson/day-01-bug-bounty-hunting-fundamental-concepts-and-course-modules-overviewmp4",
-      "https://nhprep.com/course/bug-bounty-hunting-csb18by-mr-nikunj/lesson/day-02-bug-bounty-plateform-with-bug-bounty-hunter-need-to-know-conceptsmp4",
-      null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
-    ]},
+  { phase: 2, name: "F5 VINEET", lessons: 9, why: "F5 = WAF (Web Application Firewall) — role explicitly says 'Work with WAF'", badge: "should", url: "https://nhprep.com/course/f5-vineet", weight: 7, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null]},
   { phase: 2, name: "IPSEC", lessons: 7, why: "VPN/IPsec fundamentals — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ipsec", weight: 6, completed: false,
     labs: ["Lab 16: DMVPN & IPsec|/course/ccnp-lab-06-dmvpn-ipsec","Lab 24: Site-to-Site IPsec VPN|/course/ccnp-sec-lab-04-site-to-site-vpn","Lab 26: DMVPN & FlexVPN|/course/ccnp-sec-lab-06-dmvpn-flexvpn"],
     lessonUrls: [
@@ -462,20 +464,18 @@ const COURSES = [
       "https://nhprep.com/course/ipsec/lesson/2mp4",
       null,null,null,null,null
     ]},
-  { phase: 2, name: "NGIPS", lessons: 9, why: "Next-Gen IPS — Barracuda security products use IPS", badge: "should", url: "https://nhprep.com/course/ngips", weight: 5, completed: false,
-    lessonUrls: [
-      "https://nhprep.com/course/ngips/lesson/day_01_ngipsmp4",
-      "https://nhprep.com/course/ngips/lesson/day_02_ngipsmp4",
-      null,null,null,null,null,null,null
-    ]},
   { phase: 2, name: "Cisco ESA - Email Security appliance", lessons: 5, why: "Reinforces ESA — Barracuda = Email Security", badge: "should", url: "https://nhprep.com/course/cisco-esa-email-security-applaince", weight: 6, completed: false,
     lessonUrls: [
       "https://nhprep.com/course/cisco-esa-email-security-applaince/lesson/1-introduction-history-specificationmp4",
       "https://nhprep.com/course/cisco-esa-email-security-applaince/lesson/2-email-authentication-overview-dmarkspfdkimmp4",
       null,null,null
     ]},
-  { phase: 2, name: "F5 VINEET", lessons: 9, why: "F5 = WAF (Web Application Firewall) — role explicitly says 'Work with WAF'", badge: "should", url: "https://nhprep.com/course/f5-vineet", weight: 7, completed: false,
-    lessonUrls: [null,null,null,null,null,null,null,null,null]},
+  { phase: 2, name: "NGIPS", lessons: 9, why: "Next-Gen IPS — Barracuda security products use IPS", badge: "should", url: "https://nhprep.com/course/ngips", weight: 5, completed: false,
+    lessonUrls: [
+      "https://nhprep.com/course/ngips/lesson/day_01_ngipsmp4",
+      "https://nhprep.com/course/ngips/lesson/day_02_ngipsmp4",
+      null,null,null,null,null,null,null
+    ]},
   { phase: 2, name: "Lab 30: Email & Web Security", lessons: 6, why: "Covers BOTH Email Security + Web Security — role = 'WAF, Email Security, Backup & Firewall'", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-10-email-web-security", weight: 5, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
   // PHASE 3 — Bonus
@@ -504,6 +504,10 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
   { phase: 4, name: "CCNP Security VPN (Murtaza)", lessons: 10, why: "CCNP Security VPN track — Barracuda VPN/firewall products", badge: "should", url: "https://nhprep.com/course/ccnp-security-vpn-by-murtaza", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
+  { phase: 4, name: "Lab 24: Site-to-Site IPsec VPN", lessons: 7, why: "Hands-on VPN config — Barracuda VPN products", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-04-site-to-site-vpn", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null]},
+  { phase: 4, name: "Lab 25: AnyConnect SSL VPN", lessons: 7, why: "Remote access VPN — Barracuda VPN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-05-anyconnect-ssl-vpn", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null]},
   { phase: 4, name: "CCNP SD-WAN", lessons: 10, why: "SD-WAN = modern networking — Barracuda supports SD-WAN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sd-wan-mohnish", weight: 2, completed: false,
     labs: ["Lab 18: SD-WAN Deployment|/course/ccnp-lab-08-sdwan"],
     lessonUrls: [null,null,null,null,null,null,null,null,null,null]},
@@ -515,10 +519,6 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null]},
   { phase: 4, name: "CCNP SECURITY - CISCO DUO (Pranav)", lessons: 5, why: "MFA/zero-trust security — Barracuda security products", badge: "should", url: "https://nhprep.com/course/ccnp-security-cisco-duo-by-pranav", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
-  { phase: 4, name: "Lab 24: Site-to-Site IPsec VPN", lessons: 7, why: "Hands-on VPN config — Barracuda VPN products", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-04-site-to-site-vpn", weight: 3, completed: false,
-    lessonUrls: [null,null,null,null,null,null,null]},
-  { phase: 4, name: "Lab 25: AnyConnect SSL VPN", lessons: 7, why: "Remote access VPN — Barracuda VPN solutions", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-05-anyconnect-ssl-vpn", weight: 3, completed: false,
-    lessonUrls: [null,null,null,null,null,null,null]},
   { phase: 4, name: "Lab 22: ASA NAT", lessons: 7, why: "ASA firewall NAT — firewall troubleshooting depth", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-02-asa-nat", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null,null]},
   { phase: 4, name: "Lab 23: ASA Access Control & Inspection", lessons: 6, why: "ASA firewall policies — firewall depth", badge: "should", url: "https://nhprep.com/course/ccnp-sec-lab-03-asa-access-control", weight: 2, completed: false,
@@ -544,11 +544,11 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null,null]},
   { phase: 5, name: "Lab 8: ACLs & Port Security", lessons: 6, why: "JD: 'network firewall domain' — ACLs are fundamental to firewall rules", badge: "should", url: "https://nhprep.com/course/ccna-lab-08-acls-and-port-security", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
+  { phase: 5, name: "Lab 67: Dynamic Routing Troubleshooting", lessons: 5, why: "JD: 'Strong analytical and troubleshooting skills' — routing troubleshooting", badge: "should", url: "https://nhprep.com/course/ccna-lab-17-routing-troubleshooting", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null]},
   { phase: 5, name: "Lab 70: Extended Access Control Lists", lessons: 5, why: "JD: 'URL filtering in proxy' — extended ACLs are used for filtering", badge: "should", url: "https://nhprep.com/course/ccna-lab-20-extended-acls", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
   { phase: 5, name: "Lab 73: DHCP Snooping & DAI", lessons: 5, why: "JD: 'network security' — DHCP snooping prevents L2 attacks", badge: "should", url: "https://nhprep.com/course/ccna-lab-23-dhcp-snooping-dai", weight: 2, completed: false,
-    lessonUrls: [null,null,null,null,null]},
-  { phase: 5, name: "Lab 67: Dynamic Routing Troubleshooting", lessons: 5, why: "JD: 'Strong analytical and troubleshooting skills' — routing troubleshooting", badge: "should", url: "https://nhprep.com/course/ccna-lab-17-routing-troubleshooting", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null]},
   { phase: 5, name: "Lab 65: OSPF Troubleshooting", lessons: 5, why: "JD: 'troubleshooting skills' — OSPF is core enterprise routing", badge: "should", url: "https://nhprep.com/course/ccna-lab-15-ospf-troubleshooting", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
@@ -560,15 +560,6 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
   { phase: 6, name: "CCNA (Amit)", lessons: 32, why: "Alternative CCNA course — 32 lessons, deeper coverage", badge: "should", url: "https://nhprep.com/course/ccna-by-amit", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
-  { phase: 6, name: "CCNA (Sharath)", lessons: 25, why: "Alternative CCNA course — different instructor perspective", badge: "should", url: "https://nhprep.com/course/ccna-sharath", weight: 2, completed: false,
-    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
-  { phase: 6, name: "CCNA BHARATH", lessons: 30, why: "Alternative CCNA course — 30 lessons", badge: "should", url: "https://nhprep.com/course/ccna-bharath", weight: 2, completed: false,
-    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
-  { phase: 6, name: "CCNA Course (Tamil)", lessons: 19, why: "CCNA in Tamil — if you prefer Tamil instruction", badge: "nice", url: "https://nhprep.com/course/tamil-ccna", weight: 1, completed: false,
-    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
-  { phase: 6, name: "Vishal CCNA CD", lessons: 12, why: "CCNA complementary course — 12 lessons", badge: "nice", url: "https://nhprep.com/course/vishal-ccna-cd", weight: 1, completed: false,
-    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null]},
-  // CCNA Labs (standalone)
   { phase: 6, name: "Lab 1: VLANs & Trunking", lessons: 6, why: "CCNA lab — VLANs, access ports, 802.1Q trunks", badge: "should", url: "https://nhprep.com/course/ccna-lab-01-vlans-and-trunking", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
   { phase: 6, name: "Lab 2: Inter-VLAN Routing", lessons: 5, why: "CCNA lab — Router-on-a-stick, SVIs, Layer 3 switching", badge: "should", url: "https://nhprep.com/course/ccna-lab-02-inter-vlan-routing", weight: 3, completed: false,
@@ -577,9 +568,13 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null,null]},
   { phase: 6, name: "Lab 5: OSPF Single Area", lessons: 6, why: "CCNA lab — OSPFv2 single area, DR/BDR, cost, neighbor states", badge: "should", url: "https://nhprep.com/course/ccna-lab-05-ospf-single-area", weight: 3, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
-  { phase: 6, name: "Lab 6: Multi-Area OSPF", lessons: 6, why: "CCNA lab — Multi-area OSPF, ABR, summarization, stub areas", badge: "should", url: "https://nhprep.com/course/ccna-lab-06-multi-area-ospf", weight: 2, completed: false,
-    lessonUrls: [null,null,null,null,null,null]},
   { phase: 6, name: "Lab 7: DHCP, NAT & PAT", lessons: 6, why: "CCNA lab — DHCP server/relay, static NAT, dynamic NAT, PAT", badge: "should", url: "https://nhprep.com/course/ccna-lab-07-dhcp-nat-pat", weight: 3, completed: false,
+    lessonUrls: [null,null,null,null,null,null]},
+  { phase: 6, name: "CCNA (Sharath)", lessons: 25, why: "Alternative CCNA course — different instructor perspective", badge: "should", url: "https://nhprep.com/course/ccna-sharath", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 6, name: "CCNA BHARATH", lessons: 30, why: "Alternative CCNA course — 30 lessons", badge: "should", url: "https://nhprep.com/course/ccna-bharath", weight: 2, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 6, name: "Lab 6: Multi-Area OSPF", lessons: 6, why: "CCNA lab — Multi-area OSPF, ABR, summarization, stub areas", badge: "should", url: "https://nhprep.com/course/ccna-lab-06-multi-area-ospf", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null,null]},
   { phase: 6, name: "Lab 9: IPv6 Fundamentals", lessons: 5, why: "CCNA lab — IPv6 addressing, SLAAC, OSPFv3, dual-stack", badge: "should", url: "https://nhprep.com/course/ccna-lab-09-ipv6", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
@@ -599,6 +594,11 @@ const COURSES = [
     lessonUrls: [null,null,null,null,null]},
   { phase: 6, name: "Lab 74: Network Automation Basics", lessons: 5, why: "CCNA lab — automation fundamentals for networks", badge: "should", url: "https://nhprep.com/course/ccna-lab-24-automation-basics", weight: 2, completed: false,
     lessonUrls: [null,null,null,null,null]},
+  { phase: 6, name: "CCNA Course (Tamil)", lessons: 19, why: "CCNA in Tamil — if you prefer Tamil instruction", badge: "nice", url: "https://nhprep.com/course/tamil-ccna", weight: 1, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},
+  { phase: 6, name: "Vishal CCNA CD", lessons: 12, why: "CCNA complementary course — 12 lessons", badge: "nice", url: "https://nhprep.com/course/vishal-ccna-cd", weight: 1, completed: false,
+    lessonUrls: [null,null,null,null,null,null,null,null,null,null,null,null]},
+  // CCNA Labs (standalone)
   { phase: 6, name: "Lab 75: Wireless Configuration Basics", lessons: 5, why: "CCNA lab — wireless configuration fundamentals", badge: "nice", url: "https://nhprep.com/course/ccna-lab-25-wireless", weight: 1, completed: false,
     lessonUrls: [null,null,null,null,null]},
 ];
