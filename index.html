@@ -598,6 +598,115 @@
   .sr-stat .lbl { font-size: 0.65rem; color: var(--o-faint); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
   .sr-stat.due .num { color: var(--orange); }
   .sr-stat.streak .num { color: var(--green); }
+
+  /* ===== QUIZ MODAL — Check understanding ===== */
+  .quiz-overlay {
+    position: fixed; inset: 0; z-index: 100000;
+    background: rgba(5,8,16,0.85); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px; animation: fadeIn 0.3s ease;
+  }
+  .quiz-overlay.show { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .quiz-card {
+    background: var(--o-panel); border: 1px solid var(--o-line-hi); border-radius: var(--o-radius-lg);
+    max-width: 560px; width: 100%; padding: 32px; position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1);
+  }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .quiz-close {
+    position: absolute; top: 16px; right: 16px;
+    background: none; border: none; color: var(--o-faint); font-size: 1.5rem;
+    cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 6px;
+  }
+  .quiz-close:hover { color: var(--o-ink); background: var(--o-bg-sunken); }
+  .quiz-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+  }
+  .quiz-icon {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--o-accent), var(--o-accent-2));
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
+  .quiz-title { font-size: 1.1rem; font-weight: 800; color: var(--o-ink); }
+  .quiz-subtitle { font-size: 0.78rem; color: var(--o-mute); }
+  .quiz-question {
+    font-size: 1.05rem; font-weight: 700; color: var(--o-ink); margin-bottom: 20px; line-height: 1.5;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .quiz-option {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; border-radius: var(--o-radius); border: 1px solid var(--o-line);
+    background: var(--o-bg-sunken); cursor: pointer; transition: all 0.2s;
+    font-size: 0.95rem; color: var(--o-ink); user-select: none;
+  }
+  .quiz-option:hover { border-color: var(--o-accent); background: var(--o-panel-hi); transform: translateX(4px); }
+  .quiz-option.correct {
+    border-color: var(--green); background: rgba(34,197,94,0.1); color: var(--green);
+  }
+  .quiz-option.wrong {
+    border-color: var(--red); background: rgba(239,68,68,0.1); color: var(--red);
+  }
+  .quiz-option .opt-letter {
+    width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.8rem; background: var(--o-accent-dim); color: var(--o-accent);
+  }
+  .quiz-option.correct .opt-letter { background: rgba(34,197,94,0.15); color: var(--green); }
+  .quiz-option.wrong .opt-letter { background: rgba(239,68,68,0.15); color: var(--red); }
+  .quiz-feedback {
+    padding: 16px; border-radius: var(--o-radius); margin-bottom: 16px;
+    font-size: 0.9rem; font-weight: 600; display: none;
+  }
+  .quiz-feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .quiz-feedback.correct {
+    background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: var(--green);
+  }
+  .quiz-feedback.wrong {
+    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: var(--red);
+  }
+  .quiz-feedback .explanation { font-weight: 400; color: var(--o-mute); margin-top: 6px; font-size: 0.85rem; }
+  .quiz-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .quiz-btn {
+    padding: 12px 24px; border-radius: var(--o-radius); border: none;
+    font-weight: 800; font-size: 0.9rem; font-family: var(--o-font-sans); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-btn-primary {
+    background: linear-gradient(135deg, var(--o-accent), var(--o-accent-2)); color: #fff;
+  }
+  .quiz-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(56,189,248,0.35); }
+  .quiz-btn-secondary {
+    background: var(--o-bg-sunken); color: var(--o-mute); border: 1px solid var(--o-line);
+  }
+  .quiz-btn-secondary:hover { color: var(--o-ink); border-color: var(--o-line-hi); }
+  .quiz-progress {
+    display: flex; gap: 4px; margin-bottom: 16px;
+  }
+  .quiz-progress-dot {
+    flex: 1; height: 4px; border-radius: 2px; background: var(--o-line); transition: background 0.3s;
+  }
+  .quiz-progress-dot.done { background: var(--green); }
+  .quiz-progress-dot.current { background: var(--o-accent); }
+  .quiz-progress-dot.wrong { background: var(--red); }
+
+  /* Quiz engagement bar */
+  .quiz-engagement {
+    max-width: 1100px; margin: 0 auto 24px; padding: 0 24px;
+  }
+  .quiz-engagement-card {
+    background: var(--o-panel); border: 1px solid var(--o-line); border-radius: var(--o-radius);
+    padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .quiz-engagement-info { display: flex; align-items: center; gap: 12px; }
+  .quiz-engagement-icon { font-size: 1.3rem; }
+  .quiz-engagement-text { font-size: 0.88rem; color: var(--o-mute); }
+  .quiz-engagement-text strong { color: var(--o-ink); }
+  .quiz-engagement-stats { display: flex; gap: 16px; }
+  .quiz-engagement-stat { text-align: center; }
+  .quiz-engagement-stat .num { font-size: 1.2rem; font-weight: 900; color: var(--o-accent); }
+  .quiz-engagement-stat .lbl { font-size: 0.65rem; color: var(--o-faint); text-transform: uppercase; letter-spacing: 0.5px; }
 </style>
 </head>
 <body>
@@ -658,7 +767,43 @@
   </div>
 </div>
 
-<!-- ===== SPACED REPETITION — Review due today ===== -->
+<!-- ===== QUIZ ENGAGEMENT BAR ===== -->
+<div class="quiz-engagement" id="quizEngagement">
+  <div class="quiz-engagement-card">
+    <div class="quiz-engagement-info">
+      <div class="quiz-engagement-icon">🧪</div>
+      <div class="quiz-engagement-text" id="quizEngagementText">
+        <strong>Quiz Mode Active</strong> — Videos pause to check your understanding
+      </div>
+    </div>
+    <div class="quiz-engagement-stats">
+      <div class="quiz-engagement-stat"><div class="num" id="quizStatAnswered">0</div><div class="lbl">Answered</div></div>
+      <div class="quiz-engagement-stat"><div class="num" id="quizStatCorrect">0</div><div class="lbl">Correct</div></div>
+      <div class="quiz-engagement-stat"><div class="num" id="quizStatAccuracy">—</div><div class="lbl">Accuracy</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUIZ MODAL ===== -->
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-card" id="quizCard">
+    <button class="quiz-close" onclick="closeQuiz()">✕</button>
+    <div class="quiz-header">
+      <div class="quiz-icon">🧪</div>
+      <div>
+        <div class="quiz-title" id="quizTitle">Quick Check</div>
+        <div class="quiz-subtitle" id="quizSubtitle">Let's see what you learned</div>
+      </div>
+    </div>
+    <div class="quiz-progress" id="quizProgress"></div>
+    <div class="quiz-question" id="quizQuestion">Loading...</div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <div class="quiz-actions" id="quizActions" style="display:none;">
+      <button class="quiz-btn quiz-btn-primary" id="quizNextBtn" onclick="nextQuizQuestion()">Next →</button>
+    </div>
+  </div>
+</div>
 <div class="today-plan" id="reviewSection">
   <div class="today-plan-card">
     <div class="today-plan-header">
@@ -1137,7 +1282,7 @@ function renderCourse(course, container) {
     lessonsHTML += `
       <div class="lesson ${checked}" data-lesson="${i}">
         <input type="checkbox" id="${cKey}-${i}" ${checked} onchange="toggleLesson('${cKey}', ${i}, ${course.lessons})">
-        <a href="${lessonUrl}" target="_blank" class="lesson-link" title="Open lesson ${i} video">L${i} ▶</a>
+        <a href="${lessonUrl}" target="_blank" class="lesson-link" title="Open lesson ${i} video" onclick="openLessonWithQuiz('${cKey.replace(/'/g, "\\'")}', ${i}, '${lessonUrl}');">L${i} ▶</a>
       </div>`;
   }
 
@@ -1231,10 +1376,12 @@ function resetProgress() {
     saveProgress(progress);
     localStorage.removeItem("barracuda_today_done");
     localStorage.removeItem("barracuda_sr_v1");
+    localStorage.removeItem("barracuda_quiz_v1");
     render();
     showNextAction();
     showTodayPlan();
     showReviewSection();
+    updateQuizEngagement();
     btn.dataset.armed = "false";
     btn.textContent = "Reset All Progress";
     btn.style.background = "";
@@ -1563,7 +1710,7 @@ function showTodayPlan() {
           <div class="tp-lesson-course">${item.course.name} · L${item.lessonNum} · ⭐${item.course.weight}%</div>
           <div class="tp-lesson-name">Lesson ${item.lessonNum} of ${item.course.lessons}</div>
         </div>
-        <a class="tp-lesson-action" href="${item.url}" target="_blank" onclick="event.stopPropagation(); markTodayDone('${item.course.name.replace(/'/g, "\\'")}-${item.lessonNum}'); setTimeout(showTodayPlan, 300);">▶ Watch</a>
+        <a class="tp-lesson-action" href="${item.url}" target="_blank" onclick="event.stopPropagation(); openTodayLesson('${item.course.name.replace(/'/g, "\\'")}', ${item.lessonNum});">▶ Watch</a>
       </div>`;
   });
 
@@ -1637,7 +1784,8 @@ function openTodayLesson(courseName, lessonNum) {
     saveProgress(progress);
     addToSR(courseName, lessonNum);
   }
-  window.open(url, "_blank");
+  // Open video + schedule quiz
+  openLessonWithQuiz(courseName, lessonNum, url);
   setTimeout(() => { showTodayPlan(); showReviewSection(); }, 300);
 }
 
@@ -1652,6 +1800,263 @@ function autoStartToday() {
       window.scrollTo({ top: offset, behavior: "smooth" });
     }
   }, 1000);
+}
+
+// ===== QUIZ ENGINE — Check understanding during lessons =====
+const QUIZ_KEY = "barracuda_quiz_v1";
+const QUIZ_DELAY = 120000; // 2 minutes before quiz pops up (simulates video pause)
+
+// Quiz bank — keyed by course name. Each course has topic-relevant questions.
+const QUIZ_BANK = {
+  "CCNP Routing (Nikunj)": [
+    { q: "What is the administrative distance of OSPF?", options: ["90", "110", "120", "170"], correct: 1, exp: "OSPF has AD 110. EIGRP internal is 90, RIP is 120." },
+    { q: "Which routing protocol uses DUAL algorithm?", options: ["OSPF", "BGP", "EIGRP", "RIP"], correct: 2, exp: "EIGRP uses the DUAL (Diffusing Update Algorithm) for loop-free path selection." },
+    { q: "What does BGP use to prevent routing loops between autonomous systems?", options: ["TTL", "AS_PATH", "Split horizon", "Hold-down timers"], correct: 1, exp: "BGP uses AS_PATH attribute — if a route's AS_PATH contains the local AS, it's rejected." },
+    { q: "In OSPF, what is the purpose of a DR (Designated Router)?", options: ["Reduce LSA flooding on multi-access networks", "Encrypt routing updates", "Assign IP addresses", "Block rogue routers"], correct: 0, exp: "DR reduces LSA flooding by acting as the central exchange point on broadcast multi-access networks." },
+    { q: "What is route redistribution?", options: ["Deleting old routes", "Sharing routes between different routing protocols", "Compressing the routing table", "Backing up routes to a server"], correct: 1, exp: "Redistribution imports routes from one routing protocol into another, e.g., OSPF into BGP." },
+  ],
+  "CCNP Switching": [
+    { q: "What does VLAN trunking use to carry multiple VLANs over a single link?", options: ["802.11", "802.1Q", "802.3", "802.1X"], correct: 1, exp: "802.1Q tags frames with a VLAN ID, allowing multiple VLANs on one trunk link." },
+    { q: "What is the purpose of Spanning Tree Protocol (STP)?", options: ["Speed up convergence", "Prevent switching loops", "Encrypt traffic", "Assign VLANs"], correct: 1, exp: "STP prevents loops by blocking redundant paths, leaving one active path to each switch." },
+    { q: "What is EtherChannel?", options: ["A type of VLAN", "Bonding multiple physical links into one logical link", "A routing protocol", "A security feature"], correct: 1, exp: "EtherChannel bundles multiple links (e.g., 2-8) into one logical channel for increased bandwidth and redundancy." },
+    { q: "Which protocol provides first-hop redundancy?", options: ["STP", "HSRP", "RSTP", "CDP"], correct: 1, exp: "HSRP (Hot Standby Router Protocol) provides default gateway redundancy. VRRP is the open standard equivalent." },
+    { q: "What does SVI stand for in Layer 3 switching?", options: ["Single VLAN Interface", "Switch Virtual Interface", "Simple Vector Interconnect", "Secure VLAN Isolation"], correct: 1, exp: "SVI (Switch Virtual Interface) is a virtual interface on a switch that routes between VLANs at Layer 3." },
+  ],
+  "CCNP Security WSA - Mohnish": [
+    { q: "What is the primary function of Cisco WSA?", options: ["Email security", "Web security and filtering", "Firewall rules", "VPN termination"], correct: 1, exp: "WSA (Web Security Appliance) provides web traffic filtering, malware scanning, and URL filtering." },
+    { q: "Which protocol does WSA use for explicit proxy mode?", options: ["HTTPS", "WCCP", "SMTP", "IPsec"], correct: 1, exp: "WSA uses WCCP (Web Cache Communication Protocol) to redirect traffic from routers/switches to the appliance." },
+    { q: "What is the difference between WSA and ESA?", options: ["WSA=Web, ESA=Email", "WSA=Email, ESA=Web", "They are the same", "WSA=Firewall, ESA=VPN"], correct: 0, exp: "WSA handles web traffic security; ESA (Email Security Appliance) handles email threats like spam and phishing." },
+  ],
+  "Linux Fundamentals": [
+    { q: "Which command shows the current working directory?", options: ["dir", "pwd", "cwd", "where"], correct: 1, exp: "pwd (print working directory) shows the full path of your current directory." },
+    { q: "What does 'chmod 755 file' do?", options: ["Owner: rwx, Group: r-x, Others: r-x", "Everyone: rwx", "Owner: r-- Group: r-- Others: r--", "Delete the file"], correct: 0, exp: "755 = Owner (7=rwx), Group (5=r-x), Others (5=r-x). Common for executables and directories." },
+    { q: "Which command searches for text inside files?", options: ["find", "grep", "locate", "search"], correct: 1, exp: "grep searches for patterns inside files. find searches for files by name/metadata." },
+    { q: "What does the 'sudo' command do?", options: ["Switch user", "Run a command as superuser", "Suspend a process", "Send a signal"], correct: 1, exp: "sudo (superuser do) runs a command with root/admin privileges." },
+    { q: "Which flag for 'ls' shows hidden files?", options: ["-a", "-h", "-l", "-r"], correct: 0, exp: "ls -a shows all files including hidden ones (starting with a dot)." },
+  ],
+  "Lab 72: Network Troubleshooting Methodology": [
+    { q: "What is the correct troubleshooting methodology order?", options: ["Fix → Identify → Test", "Identify → Isolate → Fix → Test → Document", "Test → Fix → Identify", "Document → Fix → Test"], correct: 1, exp: "Standard: Identify the problem → Isolate the cause → Fix → Test → Document for future reference." },
+    { q: "Which layer does a cable failure belong to?", options: ["Layer 3", "Layer 2", "Layer 1", "Layer 7"], correct: 2, exp: "Physical cable issues are Layer 1 (Physical Layer) problems." },
+    { q: "What does 'ping' test?", options: ["DNS resolution", "Layer 3 connectivity", "Port availability", "Bandwidth"], correct: 1, exp: "Ping uses ICMP to test Layer 3 (Network Layer) connectivity between hosts." },
+  ],
+  "ASA BY Mr.SUSHIL": [
+    { q: "What is the default security level for the outside interface on an ASA?", options: ["100", "50", "0", "255"], correct: 2, exp: "Outside = 0 (least trusted), Inside = 100 (most trusted). Traffic flows high→low by default." },
+    { q: "What does NAT stand for?", options: ["Network Address Translation", "Network Access Tunnel", "Node Authentication Table", "Next-hop Address Type"], correct: 0, exp: "NAT translates private IPs to public IPs, allowing internal hosts to access the internet." },
+    { q: "On ASA, what command shows active connections?", options: ["show conn", "show nat", "show xlate", "show run"], correct: 0, exp: "show conn displays all active connections through the firewall." },
+    { q: "What is the purpose of an ACL on a firewall?", options: ["Speed up traffic", "Control which traffic is allowed or denied", "Encrypt traffic", "Assign IP addresses"], correct: 1, exp: "ACLs (Access Control Lists) define permit/deny rules for traffic filtering." },
+  ],
+  "BUG BOUNTY HUNTING": [
+    { q: "What does OWASP Top 10 list?", options: ["Top 10 firewalls", "Top 10 web application security risks", "Top 10 programming languages", "Top 10 servers"], correct: 1, exp: "OWASP Top 10 lists the most critical web application security risks like SQLi, XSS, etc." },
+    { q: "What is XSS?", options: ["Cross-Site Scripting", "Extra Secure Socket", "XML Security Standard", "Cross-Server Sync"], correct: 0, exp: "XSS (Cross-Site Scripting) injects malicious scripts into web pages viewed by other users." },
+    { q: "What does SQL Injection allow an attacker to do?", options: ["Speed up the database", "Manipulate database queries", "Encrypt the database", "Backup the database"], correct: 1, exp: "SQLi injects malicious SQL into input fields to manipulate or extract database data." },
+    { q: "What is CSRF?", options: ["Cross-Site Request Forgery", "Client-Side Request Format", "Cross-Server Resource Fetch", "Custom Secure Request Framework"], correct: 0, exp: "CSRF tricks users into executing unwanted actions on a web app where they're authenticated." },
+  ],
+  "F5 VINEET": [
+    { q: "What does F5 BIG-IP primarily function as?", options: ["Email server", "Load balancer and WAF", "DNS server only", "Database server"], correct: 1, exp: "F5 BIG-IP is an ADC (Application Delivery Controller) — load balancing, WAF, SSL offload, etc." },
+    { q: "What is a VIP in F5 terminology?", options: ["Very Important Packet", "Virtual IP — load balancing endpoint", "VLAN Internal Protocol", "Verified IP"], correct: 1, exp: "VIP (Virtual IP) is the IP clients connect to; F5 distributes traffic to pool members behind it." },
+    { q: "What does WAF protect against?", options: ["Physical attacks", "Web application attacks like SQLi and XSS", "Network layer DDoS only", "Email spam"], correct: 1, exp: "WAF (Web Application Firewall) filters HTTP traffic to block OWASP Top 10 attacks." },
+  ],
+  "IPSEC": [
+    { q: "What are the two main phases of IPsec?", options: ["Phase 1 and Phase 2", "Init and Final", "Encrypt and Decrypt", "Handshake and Data"], correct: 0, exp: "Phase 1 establishes the secure management tunnel (IKE); Phase 2 establishes the data tunnel (IPsec SAs)." },
+    { q: "What does IKE stand for in IPsec?", options: ["Internet Key Exchange", "Internal Kernel Engine", "IPsec Key Encryption", "Internet Kernel Extension"], correct: 0, exp: "IKE (Internet Key Exchange) negotiates security associations and exchanges keys securely." },
+    { q: "Which protocols does IPsec use for encryption?", options: ["AES and 3DES", "HTTP and HTTPS", "TCP and UDP", "SSH and Telnet"], correct: 0, exp: "IPsec uses ESP with encryption algorithms like AES, 3DES to encrypt payload data." },
+    { q: "What is the difference between AH and ESP?", options: ["AH=authentication only, ESP=encryption+auth", "AH=encryption, ESP=authentication", "They are identical", "AH is newer than ESP"], correct: 0, exp: "AH provides data integrity/authentication only. ESP provides encryption + authentication." },
+  ],
+  "Cisco ESA - Email Security appliance": [
+    { q: "What is the primary function of Cisco ESA?", options: ["Web filtering", "Email security — anti-spam, anti-phishing, DLP", "VPN termination", "Firewall rules"], correct: 1, exp: "ESA scans incoming/outgoing email for spam, viruses, phishing, and data loss prevention." },
+    { q: "Which email authentication protocol prevents spoofing?", options: ["SMTP", "SPF/DKIM/DMARC", "POP3", "IMAP"], correct: 1, exp: "SPF, DKIM, and DMARC verify sender identity to prevent email spoofing and phishing." },
+  ],
+  "NGIPS": [
+    { q: "What does NGIPS stand for?", options: ["Next-Generation IP Service", "Next-Generation Intrusion Prevention System", "Network Gateway IP Security", "New Generation IPS"], correct: 1, exp: "NGIPS adds application awareness, threat intelligence, and behavioral analysis to traditional IPS." },
+    { q: "What is the difference between IDS and IPS?", options: ["IDS=detect only, IPS=detect+block", "IDS=block, IPS=detect", "They are the same", "IDS is newer"], correct: 0, exp: "IDS (Intrusion Detection) only alerts; IPS (Intrusion Prevention) actively blocks malicious traffic." },
+  ],
+  "PYTHON": [
+    { q: "What is the output of: print(type([]))?", options: ["<class 'list'>", "<class 'array'>", "<class 'dict'>", "Error"], correct: 0, exp: "[] creates a list, so type([]) returns <class 'list'>." },
+    { q: "Which keyword defines a function in Python?", options: ["function", "def", "func", "define"], correct: 1, exp: "def keyword defines a function: def my_function():" },
+    { q: "What does 'import' do in Python?", options: ["Exports data", "Loads a module/package for use", "Installs a package", "Deletes a file"], correct: 1, exp: "import loads a module so its functions/classes are available in your script." },
+    { q: "What is a list comprehension?", options: ["A way to read lists", "Compact syntax to create lists", "A list error", "A list printer"], correct: 1, exp: "List comprehension: [x*2 for x in range(5)] creates lists concisely." },
+  ],
+  "CCNA Complete Course": [
+    { q: "How many layers are in the OSI model?", options: ["5", "7", "4", "6"], correct: 1, exp: "OSI has 7 layers: Physical, Data Link, Network, Transport, Session, Presentation, Application." },
+    { q: "What is the subnet mask for a /24 network?", options: ["255.255.255.0", "255.255.0.0", "255.0.0.0", "255.255.255.255"], correct: 0, exp: "/24 = 255.255.255.0, providing 254 usable host addresses." },
+    { q: "What port does HTTP use?", options: ["443", "80", "22", "21"], correct: 1, exp: "HTTP uses port 80, HTTPS uses port 443." },
+    { q: "What does TCP guarantee that UDP does not?", options: ["Speed", "Reliable, ordered delivery", "Encryption", "Smaller packets"], correct: 1, exp: "TCP provides reliable, ordered delivery with acknowledgments. UDP is connectionless and best-effort." },
+    { q: "What is the default VLAN on Cisco switches?", options: ["VLAN 100", "VLAN 1", "VLAN 99", "VLAN 0"], correct: 1, exp: "VLAN 1 is the default VLAN; all ports belong to it unless configured otherwise." },
+  ],
+};
+
+// Quiz state
+let quizState = { course: null, questions: [], current: 0, answered: 0, correct: 0, active: false };
+
+function loadQuizStats() {
+  try { return JSON.parse(localStorage.getItem(QUIZ_KEY) || '{"answered":0,"correct":0}'); }
+  catch { return { answered: 0, correct: 0 }; }
+}
+function saveQuizStats(stats) {
+  localStorage.setItem(QUIZ_KEY, JSON.stringify(stats));
+}
+
+function updateQuizEngagement() {
+  const stats = loadQuizStats();
+  const answeredEl = document.getElementById("quizStatAnswered");
+  const correctEl = document.getElementById("quizStatCorrect");
+  const accuracyEl = document.getElementById("quizStatAccuracy");
+  if (answeredEl) answeredEl.textContent = stats.answered;
+  if (correctEl) correctEl.textContent = stats.correct;
+  if (accuracyEl) accuracyEl.textContent = stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) + "%" : "—";
+}
+
+// Start a quiz for a course — called when opening a lesson
+function startQuizForCourse(courseName) {
+  const bank = QUIZ_BANK[courseName];
+  if (!bank || bank.length === 0) return; // no quiz for this course
+
+  // Pick 3 random questions from the bank
+  const shuffled = [...bank].sort(() => Math.random() - 0.5);
+  const selected = shuffled.slice(0, Math.min(3, shuffled.length));
+
+  quizState = {
+    course: courseName,
+    questions: selected,
+    current: 0,
+    answered: 0,
+    correct: 0,
+    active: true,
+  };
+
+  showQuizQuestion();
+}
+
+function showQuizQuestion() {
+  const overlay = document.getElementById("quizOverlay");
+  const titleEl = document.getElementById("quizTitle");
+  const subtitleEl = document.getElementById("quizSubtitle");
+  const progressEl = document.getElementById("quizProgress");
+  const questionEl = document.getElementById("quizQuestion");
+  const optionsEl = document.getElementById("quizOptions");
+  const feedbackEl = document.getElementById("quizFeedback");
+  const actionsEl = document.getElementById("quizActions");
+
+  if (!overlay || !quizState.active) return;
+
+  const q = quizState.questions[quizState.current];
+  if (!q) return;
+
+  titleEl.textContent = "🧪 Quick Check — " + quizState.course;
+  subtitleEl.textContent = `Question ${quizState.current + 1} of ${quizState.questions.length} — Can you answer this?`;
+
+  // Progress dots
+  let progressHTML = "";
+  quizState.questions.forEach((_, i) => {
+    let cls = "quiz-progress-dot";
+    if (i < quizState.current) cls += quizState.questions[i].answeredCorrect === true ? " done" : (quizState.questions[i].answeredCorrect === false ? " wrong" : " done");
+    if (i === quizState.current) cls += " current";
+    progressHTML += `<div class="${cls}"></div>`;
+  });
+  progressEl.innerHTML = progressHTML;
+
+  questionEl.textContent = q.q;
+
+  // Options
+  let optionsHTML = "";
+  const letters = ["A", "B", "C", "D"];
+  q.options.forEach((opt, i) => {
+    optionsHTML += `
+      <div class="quiz-option" onclick="answerQuiz(${i})">
+        <div class="opt-letter">${letters[i]}</div>
+        <span>${opt}</span>
+      </div>`;
+  });
+  optionsEl.innerHTML = optionsHTML;
+
+  feedbackEl.classList.remove("show", "correct", "wrong");
+  actionsEl.style.display = "none";
+
+  overlay.classList.add("show");
+}
+
+function answerQuiz(selectedIdx) {
+  const q = quizState.questions[quizState.current];
+  if (!q || q.answered) return;
+
+  q.answered = true;
+  const isCorrect = selectedIdx === q.correct;
+  q.answeredCorrect = isCorrect;
+  quizState.answered++;
+  if (isCorrect) quizState.correct++;
+
+  // Update stats
+  const stats = loadQuizStats();
+  stats.answered++;
+  if (isCorrect) stats.correct++;
+  saveQuizStats(stats);
+  updateQuizEngagement();
+
+  // Show correct/wrong styling
+  const options = document.querySelectorAll(".quiz-option");
+  options.forEach((opt, i) => {
+    opt.style.pointerEvents = "none"; // disable further clicks
+    if (i === q.correct) opt.classList.add("correct");
+    if (i === selectedIdx && !isCorrect) opt.classList.add("wrong");
+  });
+
+  // Show feedback
+  const feedbackEl = document.getElementById("quizFeedback");
+  feedbackEl.innerHTML = isCorrect
+    ? `✅ Correct! ${q.exp}`
+    : `❌ Not quite. The correct answer is <strong>${["A","B","C","D"][q.correct]}</strong>. ${q.exp}`;
+  feedbackEl.classList.add("show", isCorrect ? "correct" : "wrong");
+
+  // Show next button
+  const actionsEl = document.getElementById("quizActions");
+  const nextBtn = document.getElementById("quizNextBtn");
+  actionsEl.style.display = "flex";
+  nextBtn.textContent = quizState.current < quizState.questions.length - 1 ? "Next →" : "Finish ✓";
+}
+
+function nextQuizQuestion() {
+  if (quizState.current < quizState.questions.length - 1) {
+    quizState.current++;
+    showQuizQuestion();
+  } else {
+    // Quiz complete
+    closeQuiz();
+    // Show completion summary
+    const pct = Math.round((quizState.correct / quizState.questions.length) * 100);
+    const msg = pct >= 80 ? "🎉 Excellent! You've got this topic down." :
+                pct >= 50 ? "👍 Decent — review the material and try again." :
+                "📚 Keep learning — re-watch the lesson and retry.";
+    const overlay = document.getElementById("quizOverlay");
+    const card = document.getElementById("quizCard");
+    card.innerHTML = `
+      <button class="quiz-close" onclick="closeQuiz()">✕</button>
+      <div style="text-align:center; padding:20px;">
+        <div style="font-size:3rem; margin-bottom:12px;">${pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "📚"}</div>
+        <div style="font-size:1.4rem; font-weight:800; color:var(--o-ink); margin-bottom:8px;">Quiz Complete!</div>
+        <div style="font-size:1.1rem; color:var(--o-accent); font-weight:800; margin-bottom:12px;">${quizState.correct}/${quizState.questions.length} correct (${pct}%)</div>
+        <div style="color:var(--o-mute); margin-bottom:20px;">${msg}</div>
+        <button class="quiz-btn quiz-btn-primary" onclick="closeQuiz()">Continue Learning →</button>
+      </div>`;
+    overlay.classList.add("show");
+    quizState.active = false;
+  }
+}
+
+function closeQuiz() {
+  const overlay = document.getElementById("quizOverlay");
+  if (overlay) overlay.classList.remove("show");
+  quizState.active = false;
+}
+
+// Open lesson with quiz — opens video, then pops quiz after delay
+function openLessonWithQuiz(courseName, lessonNum, url) {
+  // Open the video in a new tab
+  window.open(url, "_blank");
+
+  // Pop quiz after delay (simulates "pause and check")
+  setTimeout(() => {
+    startQuizForCourse(courseName);
+  }, QUIZ_DELAY);
 }
 
 // ===== SPACED REPETITION — Review engine =====
@@ -1831,6 +2236,7 @@ showDailyQuote();
 showNextAction();
 showTodayPlan();
 showReviewSection();
+updateQuizEngagement();
 autoStartToday();
 window.addEventListener("scroll", updateScrollSpy, { passive: true });
 window.addEventListener("resize", updateScrollSpy);
