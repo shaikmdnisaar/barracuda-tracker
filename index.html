@@ -2147,7 +2147,7 @@ function openLessonWithQuiz(courseName, lessonNum, url) {
   const hotQuestions = bank ? bank.filter(q => q.interviewHot) : [];
 
   if (hotQuestions.length > 0) {
-    if (subtitleEl) subtitleEl.textContent = "📺 Video playing — a quiz will pop up for interview-hot topics";
+    if (subtitleEl) subtitleEl.textContent = "📺 Video playing — quiz will pop up for interview-hot topics";
     if (statusEl) statusEl.innerHTML = "⏱️ Quiz coming for interview-hot topics — keep watching!";
     // Schedule quiz after 90 seconds (1.5 minutes into the video)
     videoPlayerState.quizTimer = setTimeout(() => {
@@ -2161,16 +2161,62 @@ function openLessonWithQuiz(courseName, lessonNum, url) {
     if (statusEl) statusEl.innerHTML = "✅ No quiz needed — enjoy the video!";
   }
 
-  // Load the video URL in the iframe
+  // Try loading in iframe — NHPREP may block it via CSP
+  // We'll detect the block and show a fallback
   frame.src = url;
   overlay.classList.add("show");
+
+  // Detect if iframe is blocked (CSP frame-ancestors) — show fallback after 3 seconds
+  setTimeout(() => {
+    if (videoPlayerState.url === url) {
+      try {
+        // If the iframe is blocked, we can't access contentWindow.location
+        // but we can check if the frame has any content
+        const frameDoc = frame.contentDocument || frame.contentWindow?.document;
+        // If we can't access it (cross-origin/CSP), show fallback
+        if (!frameDoc && frame.src) {
+          showVideoFallback(url);
+        }
+      } catch (e) {
+        // Cross-origin blocked — show fallback
+        showVideoFallback(url);
+      }
+    }
+  }, 3000);
+}
+
+// Show fallback when iframe is blocked by CSP
+function showVideoFallback(url) {
+  const frame = document.getElementById("videoFrame");
+  const wrap = document.querySelector(".video-frame-wrap");
+  if (!wrap) return;
+  // Replace iframe with fallback message
+  wrap.innerHTML = `
+    <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--o-bg-sunken); text-align:center; padding:40px;">
+      <div style="font-size:3rem; margin-bottom:16px;">📺</div>
+      <div style="font-size:1.1rem; font-weight:800; color:var(--o-ink); margin-bottom:8px;">Video opened in new tab</div>
+      <div style="font-size:0.85rem; color:var(--o-mute); margin-bottom:20px; max-width:400px;">
+        NHPREP doesn't allow embedding videos on other sites. The video has opened in a new tab.<br>
+        Come back here when the quiz pops up!
+      </div>
+      <a href="${url}" target="_blank" style="padding:12px 24px; border-radius:var(--o-radius); background:linear-gradient(135deg, var(--o-accent), var(--o-accent-2)); color:#fff; font-weight:800; text-decoration:none; font-size:0.9rem;">
+        ▶ Open Video in New Tab
+      </a>
+    </div>`;
+  // Also auto-open in new tab as backup
+  window.open(url, "_blank");
 }
 
 // Close the in-page video player
 function closeVideoPlayer() {
   const overlay = document.getElementById("videoOverlay");
   const frame = document.getElementById("videoFrame");
+  const wrap = document.querySelector(".video-frame-wrap");
   if (frame) frame.src = ""; // stop video
+  // Restore the iframe if it was replaced by fallback
+  if (wrap && !document.getElementById("videoFrame")) {
+    wrap.innerHTML = '<iframe id="videoFrame" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+  }
   if (overlay) overlay.classList.remove("show");
   if (videoPlayerState.quizTimer) {
     clearTimeout(videoPlayerState.quizTimer);
