@@ -1128,10 +1128,37 @@ function toggleAllLessons() {
 }
 
 function resetProgress() {
-  if (confirm("Reset ALL progress? This cannot be undone.")) {
+  const btn = document.querySelector('button.btn-danger');
+  if (!btn) return;
+  // Two-click confirmation — first click arms, second click confirms
+  if (btn.dataset.armed === "true") {
     progress = {};
     saveProgress(progress);
+    localStorage.removeItem("barracuda_today_done");
     render();
+    showNextAction();
+    showTodayPlan();
+    btn.dataset.armed = "false";
+    btn.textContent = "Reset All Progress";
+    btn.style.background = "";
+    btn.style.color = "";
+    btn.style.borderColor = "";
+  } else {
+    btn.dataset.armed = "true";
+    btn.textContent = "⚠ Click again to confirm reset";
+    btn.style.background = "rgba(239,68,68,0.15)";
+    btn.style.color = "var(--red)";
+    btn.style.borderColor = "var(--red)";
+    // Auto-disarm after 4 seconds
+    setTimeout(() => {
+      if (btn.dataset.armed === "true") {
+        btn.dataset.armed = "false";
+        btn.textContent = "Reset All Progress";
+        btn.style.background = "";
+        btn.style.color = "";
+        btn.style.borderColor = "";
+      }
+    }, 4000);
   }
 }
 
