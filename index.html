@@ -1925,6 +1925,8 @@ function startQuizForCourse(courseName) {
   };
 
   showQuizQuestion();
+  // Play a notification sound to grab attention
+  playQuizSound();
 }
 
 function showQuizQuestion() {
@@ -2053,10 +2055,118 @@ function openLessonWithQuiz(courseName, lessonNum, url) {
   // Open the video in a new tab
   window.open(url, "_blank");
 
-  // Pop quiz after delay (simulates "pause and check")
-  setTimeout(() => {
-    startQuizForCourse(courseName);
-  }, QUIZ_DELAY);
+  // Show countdown timer so user knows quiz is coming
+  showQuizCountdown(courseName, QUIZ_DELAY);
+}
+
+// Countdown timer — shows "Quiz in 2:00" then pops the quiz
+let quizCountdownInterval = null;
+function showQuizCountdown(courseName, duration) {
+  // Clear any existing countdown
+  if (quizCountdownInterval) clearInterval(quizCountdownInterval);
+
+  // Create or update countdown banner
+  let banner = document.getElementById("quizCountdown");
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.id = "quizCountdown";
+    banner.style.cssText = `
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(37,99,235,0.1));
+      border: 1px solid var(--o-line-hi); border-radius: 999px;
+      padding: 12px 24px; z-index: 99998; display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4); backdrop-filter: blur(8px);
+      font-family: var(--o-font-sans); transition: all 0.3s;
+    `;
+    document.body.appendChild(banner);
+  }
+
+  let remaining = Math.floor(duration / 1000);
+  const updateBanner = () => {
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    const timeStr = `${mins}:${secs.toString().padStart(2, "0")}`;
+    banner.innerHTML = `
+      <span style="font-size:1.2rem;">⏱️</span>
+      <span style="color:var(--o-ink); font-weight:800; font-size:0.95rem;">Quiz in <span style="color:var(--o-accent);">${timeStr}</span></span>
+      <span style="color:var(--o-faint); font-size:0.78rem;">— Keep watching the video!</span>
+      <button onclick="cancelQuizCountdown()" style="background:none;border:1px solid var(--o-line);color:var(--o-faint);padding:4px 10px;border-radius:6px;font-size:0.75rem;cursor:pointer;font-family:var(--o-font-sans);">Skip</button>
+    `;
+    // Change color as time runs out
+    if (remaining <= 10) {
+      banner.style.borderColor = "var(--orange)";
+      banner.style.background = "linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,179,8,0.1))";
+    }
+  };
+
+  updateBanner();
+  banner.style.display = "flex";
+
+  quizCountdownInterval = setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(quizCountdownInterval);
+      quizCountdownInterval = null;
+      banner.style.display = "none";
+      // Pop the quiz and focus this tab
+      startQuizForCourse(courseName);
+      window.focus();
+      // Flash the tab title to grab attention
+      flashTabTitle();
+    } else {
+      updateBanner();
+    }
+  }, 1000);
+}
+
+function cancelQuizCountdown() {
+  if (quizCountdownInterval) {
+    clearInterval(quizCountdownInterval);
+    quizCountdownInterval = null;
+  }
+  const banner = document.getElementById("quizCountdown");
+  if (banner) banner.style.display = "none";
+}
+
+// Flash the browser tab title to grab user's attention
+let titleFlashInterval = null;
+function flashTabTitle() {
+  const originalTitle = document.title;
+  let toggle = false;
+  let flashes = 0;
+  if (titleFlashInterval) clearInterval(titleFlashInterval);
+  titleFlashInterval = setInterval(() => {
+    document.title = toggle ? "🧪 QUIZ READY — Answer now!" : originalTitle;
+    toggle = !toggle;
+    flashes++;
+    if (flashes >= 20) { // flash for ~10 seconds
+      clearInterval(titleFlashInterval);
+      titleFlashInterval = null;
+      document.title = originalTitle;
+    }
+  }, 500);
+}
+
+// Play a notification beep using Web Audio API (no external file needed)
+function playQuizSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Play 3 ascending beeps
+    [523, 659, 784].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = "sine";
+      const start = ctx.currentTime + i * 0.15;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(0.3, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.2);
+      osc.start(start);
+      osc.stop(start + 0.2);
+    });
+  } catch (e) { /* audio not supported — silent fail */ }
 }
 
 // ===== SPACED REPETITION — Review engine =====
