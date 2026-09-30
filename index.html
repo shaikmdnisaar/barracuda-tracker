@@ -1516,9 +1516,11 @@ function autoStartToday() {
   setTimeout(() => {
     const planEl = document.getElementById("todayPlan");
     if (planEl) {
-      planEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      const rect = planEl.getBoundingClientRect();
+      const offset = rect.top + window.scrollY - 80; // account for sticky nav
+      window.scrollTo({ top: offset, behavior: "smooth" });
     }
-  }, 800);
+  }, 1000);
 }
 
 // ---- Init ----
