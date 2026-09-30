@@ -407,6 +407,130 @@
   .rail-item.active .rail-label { opacity: 1; color: var(--o-accent); }
   .rail-item.done .rail-indicator { background: var(--green); }
   .rail-item.done.active .rail-indicator { background: var(--green); box-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
+
+  /* ===== TODAY'S PLAN — auto-start daily study ===== */
+  .today-plan {
+    max-width: 1100px; margin: 0 auto 28px; padding: 0 24px;
+  }
+  .today-plan-card {
+    background: linear-gradient(135deg, rgba(56,189,248,0.10), rgba(37,99,235,0.06));
+    border: 1px solid var(--o-line-hi); border-radius: var(--o-radius-lg);
+    overflow: hidden;
+  }
+  .today-plan-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 28px; border-bottom: 1px solid var(--o-line);
+    flex-wrap: wrap; gap: 12px;
+    background: rgba(11,18,32,0.4);
+  }
+  .today-plan-header .tp-left { display: flex; align-items: center; gap: 14px; }
+  .today-plan-header .tp-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--o-accent), var(--o-accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; flex-shrink: 0;
+  }
+  .today-plan-header .tp-title { font-size: 1.2rem; font-weight: 800; color: var(--o-ink); }
+  .today-plan-header .tp-date { font-size: 0.8rem; color: var(--o-mute); }
+  .today-plan-header .tp-right { text-align: right; }
+  .today-plan-header .tp-pace { font-size: 0.75rem; color: var(--o-faint); text-transform: uppercase; letter-spacing: 1px; }
+  .today-plan-header .tp-pace-val { font-size: 1.6rem; font-weight: 900; color: var(--o-accent); }
+
+  .today-plan-body { padding: 24px 28px; }
+  .tp-section-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--o-accent); margin-bottom: 12px;
+  }
+
+  /* Lesson queue */
+  .tp-queue { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .tp-lesson {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--o-panel); border: 1px solid var(--o-line); border-radius: var(--o-radius);
+    padding: 14px 18px; transition: all 0.2s; cursor: pointer;
+  }
+  .tp-lesson:hover { border-color: var(--o-accent); transform: translateX(4px); }
+  .tp-lesson.done { border-color: rgba(34,197,94,0.3); background: rgba(34,197,94,0.04); }
+  .tp-lesson-num {
+    width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85rem;
+    background: var(--o-accent-dim); color: var(--o-accent);
+  }
+  .tp-lesson.done .tp-lesson-num { background: rgba(34,197,94,0.15); color: var(--green); }
+  .tp-lesson-info { flex: 1; min-width: 0; }
+  .tp-lesson-course { font-size: 0.75rem; color: var(--o-faint); text-transform: uppercase; letter-spacing: 0.5px; }
+  .tp-lesson-name { font-size: 0.95rem; font-weight: 700; color: var(--o-ink); }
+  .tp-lesson.done .tp-lesson-name { text-decoration: line-through; color: var(--o-faint); }
+  .tp-lesson-action {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: var(--o-radius-sm);
+    background: linear-gradient(135deg, var(--o-accent), var(--o-accent-2));
+    color: #fff; font-weight: 700; font-size: 0.82rem; text-decoration: none;
+    white-space: nowrap; transition: all 0.2s;
+  }
+  .tp-lesson-action:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(56,189,248,0.35); }
+  .tp-lesson.done .tp-lesson-action { background: rgba(34,197,94,0.2); color: var(--green); }
+
+  /* Connected lab for today */
+  .tp-lab {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(249,115,22,0.06); border: 1px solid rgba(249,115,22,0.2); border-radius: var(--o-radius);
+    padding: 16px 18px; margin-bottom: 20px;
+  }
+  .tp-lab-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .tp-lab-info { flex: 1; }
+  .tp-lab-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); }
+  .tp-lab-name { font-size: 0.95rem; font-weight: 700; color: var(--o-ink); }
+  .tp-lab-desc { font-size: 0.78rem; color: var(--o-mute); }
+  .tp-lab-link {
+    padding: 8px 16px; border-radius: var(--o-radius-sm); border: 1px solid rgba(249,115,22,0.3);
+    color: var(--orange); font-weight: 700; font-size: 0.82rem; text-decoration: none; white-space: nowrap;
+  }
+  .tp-lab-link:hover { background: rgba(249,115,22,0.1); }
+
+  /* Progress ring for today */
+  .tp-progress {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px; background: var(--o-bg-sunken); border-radius: var(--o-radius);
+    border: 1px solid var(--o-line);
+  }
+  .tp-progress-ring {
+    width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
+    background: conic-gradient(var(--green) var(--tp-pct, 0deg), var(--o-line) 0deg);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .tp-progress-ring::before {
+    content: ''; position: absolute; inset: 5px; border-radius: 50%; background: var(--o-bg-sunken);
+  }
+  .tp-progress-ring span {
+    position: relative; font-size: 0.85rem; font-weight: 800; color: var(--o-ink);
+  }
+  .tp-progress-text { flex: 1; }
+  .tp-progress-text .tp-pt-main { font-size: 0.95rem; font-weight: 700; color: var(--o-ink); }
+  .tp-progress-text .tp-pt-sub { font-size: 0.8rem; color: var(--o-mute); }
+
+  /* 90-day timeline */
+  .tp-timeline {
+    display: flex; gap: 4px; margin-top: 16px; height: 8px; border-radius: 4px; overflow: hidden;
+  }
+  .tp-timeline-day {
+    flex: 1; background: var(--o-line); transition: background 0.2s;
+  }
+  .tp-timeline-day.done { background: var(--green); }
+  .tp-timeline-day.today { background: var(--o-accent); box-shadow: 0 0 8px var(--o-accent); }
+  .tp-timeline-labels {
+    display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--o-faint); margin-top: 4px;
+  }
+
+  /* All done state */
+  .tp-alldone {
+    text-align: center; padding: 40px 20px;
+  }
+  .tp-alldone .emoji { font-size: 3rem; margin-bottom: 12px; }
+  .tp-alldone .title { font-size: 1.3rem; font-weight: 800; color: var(--green); margin-bottom: 8px; }
+  .tp-alldone .sub { font-size: 0.9rem; color: var(--o-mute); }
 </style>
 </head>
 <body>
@@ -442,6 +566,28 @@
       <div class="day-counter" id="dayCounter"></div>
     </div>
     <a class="next-action-btn" id="nextActionBtn" href="#phase-1"><span>Open & Learn</span> <span class="arrow">→</span></a>
+  </div>
+</div>
+
+<!-- ===== TODAY'S PLAN — auto-starts on page open ===== -->
+<div class="today-plan" id="todayPlan">
+  <div class="today-plan-card">
+    <div class="today-plan-header">
+      <div class="tp-left">
+        <div class="tp-icon">🎯</div>
+        <div>
+          <div class="tp-title">Today's Plan</div>
+          <div class="tp-date" id="tpDate">Loading...</div>
+        </div>
+      </div>
+      <div class="tp-right">
+        <div class="tp-pace">Daily Pace</div>
+        <div class="tp-pace-val" id="tpPace">—</div>
+      </div>
+    </div>
+    <div class="today-plan-body" id="tpBody">
+      <div style="text-align:center; padding:20px; color:var(--o-mute);">Loading your plan...</div>
+    </div>
   </div>
 </div>
 
@@ -959,6 +1105,7 @@ function toggleLesson(courseName, lessonNum, totalLessons) {
   saveProgress(progress);
   render();
   showNextAction();
+  showTodayPlan();
 }
 
 function toggleLessons(courseName) {
@@ -1152,24 +1299,13 @@ function showNextAction() {
     const daysSince = Math.floor((Date.now() - firstDate) / 86400000) + 1;
     dayEl.innerHTML = `📅 Day <span class="num">${daysSince}</span> of your Barracuda journey`;
 
-    // Make hero "Start Learning" button scroll to this course
+    // Make hero "Start Learning" button scroll to Today's Plan
     const heroBtn = document.getElementById("heroStartBtn");
     if (heroBtn) {
       heroBtn.onclick = (e) => {
         e.preventDefault();
-        // Switch to phase view and scroll to the course's phase
-        if (currentView !== "phase") { currentView = "phase"; render(); }
-        const phaseEl = document.getElementById("phase-" + next.phase);
-        if (phaseEl) {
-          phaseEl.scrollIntoView({ behavior: "smooth", block: "start" });
-          // Auto-expand the course's lessons after scroll
-          setTimeout(() => {
-            const lessonsEl = document.getElementById("lessons-" + next.name);
-            if (lessonsEl) lessonsEl.classList.add("open");
-            const card = document.querySelector(`[data-course="${next.name}"]`);
-            if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
-          }, 600);
-        }
+        const planEl = document.getElementById("todayPlan");
+        if (planEl) planEl.scrollIntoView({ behavior: "smooth", block: "start" });
       };
     }
   } else {
@@ -1181,6 +1317,210 @@ function showNextAction() {
   }
 }
 
+// ===== TODAY'S PLAN — 90-day auto study engine =====
+const TARGET_DAYS = 90;
+const PLAN_KEY = "barracuda_plan_v1";
+
+// Build a flat ordered list of every lesson across all courses (priority order)
+function buildLessonQueue() {
+  const isCourseDone = (c) => (c.completed) || ((progress[c.name] || 0) >= c.lessons);
+  // Sort courses by weight desc, then phase asc
+  const sorted = [...COURSES].sort((a, b) => {
+    if (b.weight !== a.weight) return b.weight - a.weight;
+    return a.phase - b.phase;
+  });
+  const queue = [];
+  sorted.forEach(course => {
+    if (isCourseDone(course)) return; // skip completed courses
+    const doneCount = progress[course.name] || 0;
+    for (let i = doneCount; i < course.lessons; i++) {
+      queue.push({
+        course: course,
+        lessonNum: i + 1,
+        lessonIdx: i,
+        url: (course.lessonUrls && course.lessonUrls[i]) ? course.lessonUrls[i] : course.url,
+      });
+    }
+  });
+  return queue;
+}
+
+// Calculate daily pace: remaining lessons / remaining days
+function calcPace() {
+  const queue = buildLessonQueue();
+  const STREAK_KEY = "barracuda_streak";
+  let streak = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+  if (!streak.firstVisit) {
+    streak.firstVisit = new Date().toDateString();
+    localStorage.setItem(STREAK_KEY, JSON.stringify(streak));
+  }
+  const firstDate = new Date(streak.firstVisit);
+  const daysElapsed = Math.floor((Date.now() - firstDate) / 86400000);
+  const daysRemaining = Math.max(1, TARGET_DAYS - daysElapsed);
+  const lessonsPerDay = Math.ceil(queue.length / daysRemaining);
+  return { queue, lessonsPerDay, daysElapsed, daysRemaining, totalRemaining: queue.length };
+}
+
+// Find the connected lab for the current lesson's course
+function getLabForCourse(course) {
+  if (!course.labs || course.labs.length === 0) return null;
+  // Pick the first lab that hasn't been done (we track labs by course progress)
+  // For simplicity, return the first lab — it's the most relevant to the current lessons
+  const labStr = course.labs[0];
+  const [labName, labUrl] = labStr.split("|");
+  return { name: labName, url: "https://nhprep.com" + labUrl, totalLabs: course.labs.length, allLabs: course.labs };
+}
+
+// Track which lessons were done today
+function getTodayDone() {
+  const today = new Date().toDateString();
+  const data = JSON.parse(localStorage.getItem("barracuda_today_done") || "{}");
+  if (data.date !== today) return { date: today, count: 0, lessonKeys: [] };
+  return data;
+}
+
+function markTodayDone(lessonKey) {
+  const today = new Date().toDateString();
+  let data = JSON.parse(localStorage.getItem("barracuda_today_done") || "{}");
+  if (data.date !== today) data = { date: today, count: 0, lessonKeys: [] };
+  if (!data.lessonKeys.includes(lessonKey)) {
+    data.lessonKeys.push(lessonKey);
+    data.count = data.lessonKeys.length;
+    localStorage.setItem("barracuda_today_done", JSON.stringify(data));
+  }
+}
+
+function showTodayPlan() {
+  const body = document.getElementById("tpBody");
+  const dateEl = document.getElementById("tpDate");
+  const paceEl = document.getElementById("tpPace");
+  if (!body) return;
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+  if (dateEl) dateEl.textContent = dateStr;
+
+  const { queue, lessonsPerDay, daysElapsed, daysRemaining, totalRemaining } = calcPace();
+  if (paceEl) paceEl.textContent = lessonsPerDay + "/day";
+
+  // All done?
+  if (queue.length === 0) {
+    body.innerHTML = `
+      <div class="tp-alldone">
+        <div class="emoji">🎉</div>
+        <div class="title">All lessons complete!</div>
+        <div class="sub">You're fully prepared for Barracuda. Go apply and crack the interview!</div>
+        <a href="https://jobs.jobvite.com/barracuda-networks-inc/job/oN3Tzfw2/apply" target="_blank" class="next-action-btn" style="margin-top:16px; display:inline-flex;"><span>Apply Now →</span></a>
+      </div>`;
+    return;
+  }
+
+  // Today's lessons = first N lessons from the queue
+  const todayDone = getTodayDone();
+  const todayLessons = queue.slice(0, lessonsPerDay);
+  const todayDoneCount = todayLessons.filter(l => todayDone.lessonKeys.includes(l.course.name + "-" + l.lessonNum)).length;
+  const todayPct = Math.round((todayDoneCount / todayLessons.length) * 100);
+
+  // Find connected lab for the first lesson's course
+  const lab = getLabForCourse(todayLessons[0].course);
+
+  // Build lesson queue HTML
+  let lessonsHTML = "";
+  todayLessons.forEach((item, idx) => {
+    const key = item.course.name + "-" + item.lessonNum;
+    const isDone = todayDone.lessonKeys.includes(key);
+    const courseProgress = progress[item.course.name] || 0;
+    const lessonAlreadyDone = item.lessonNum <= courseProgress;
+    const done = isDone || lessonAlreadyDone;
+    lessonsHTML += `
+      <div class="tp-lesson ${done ? "done" : ""}" onclick="if(!${done}) openTodayLesson('${item.course.name.replace(/'/g, "\\'")}', ${item.lessonNum})">
+        <div class="tp-lesson-num">${done ? "✓" : idx + 1}</div>
+        <div class="tp-lesson-info">
+          <div class="tp-lesson-course">${item.course.name} · L${item.lessonNum} · ⭐${item.course.weight}%</div>
+          <div class="tp-lesson-name">Lesson ${item.lessonNum} of ${item.course.lessons}</div>
+        </div>
+        <a class="tp-lesson-action" href="${item.url}" target="_blank" onclick="event.stopPropagation(); markTodayDone('${item.course.name.replace(/'/g, "\\'")}-${item.lessonNum}'); setTimeout(showTodayPlan, 300);">▶ Watch</a>
+      </div>`;
+  });
+
+  // Build lab HTML
+  let labHTML = "";
+  if (lab) {
+    labHTML = `
+      <div class="tp-lab">
+        <div class="tp-lab-icon">🔧</div>
+        <div class="tp-lab-info">
+          <div class="tp-lab-label">Connected Lab — Practice what you learn</div>
+          <div class="tp-lab-name">${lab.name}</div>
+          <div class="tp-lab-desc">From ${todayLessons[0].course.name} · ${lab.totalLabs} lab${lab.totalLabs !== 1 ? "s" : ""} available</div>
+        </div>
+        <a class="tp-lab-link" href="${lab.url}" target="_blank">Open Lab ↗</a>
+      </div>`;
+  }
+
+  // Build progress ring
+  const ringDeg = Math.round((todayDoneCount / todayLessons.length) * 360);
+  let progressHTML = `
+    <div class="tp-progress">
+      <div class="tp-progress-ring" style="--tp-pct: ${ringDeg}deg;">
+        <span>${todayPct}%</span>
+      </div>
+      <div class="tp-progress-text">
+        <div class="tp-pt-main">${todayDoneCount}/${todayLessons.length} lessons done today</div>
+        <div class="tp-pt-sub">${totalRemaining} lessons left · ${daysRemaining} days to target · ${lessonsPerDay} lessons/day</div>
+      </div>
+    </div>`;
+
+  // Build 90-day timeline
+  let timelineHTML = "";
+  if (daysElapsed < TARGET_DAYS) {
+    let daysHTML = "";
+    for (let d = 0; d < TARGET_DAYS; d++) {
+      let cls = "tp-timeline-day";
+      if (d < daysElapsed) cls += " done";
+      if (d === daysElapsed) cls += " today";
+      daysHTML += `<div class="${cls}"></div>`;
+    }
+    timelineHTML = `
+      <div class="tp-timeline">${daysHTML}</div>
+      <div class="tp-timeline-labels">
+        <span>Day 1</span>
+        <span>Today: Day ${daysElapsed + 1}</span>
+        <span>Day ${TARGET_DAYS} 🎯</span>
+      </div>`;
+  }
+
+  body.innerHTML = `
+    <div class="tp-section-label">📚 Today's ${todayLessons.length} Lessons — just watch these</div>
+    <div class="tp-queue">${lessonsHTML}</div>
+    ${labHTML}
+    ${progressHTML}
+    ${timelineHTML}
+  `;
+}
+
+// Open a today's lesson and mark it
+function openTodayLesson(courseName, lessonNum) {
+  // Find the lesson URL
+  const course = COURSES.find(c => c.name === courseName);
+  if (!course) return;
+  const url = (course.lessonUrls && course.lessonUrls[lessonNum - 1]) ? course.lessonUrls[lessonNum - 1] : course.url;
+  markTodayDone(courseName + "-" + lessonNum);
+  window.open(url, "_blank");
+  setTimeout(showTodayPlan, 300);
+}
+
+// Auto-scroll to Today's Plan on page open
+function autoStartToday() {
+  // Wait for render to complete, then scroll to Today's Plan
+  setTimeout(() => {
+    const planEl = document.getElementById("todayPlan");
+    if (planEl) {
+      planEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, 800);
+}
+
 // ---- Init ----
 render();
 buildSectionRail();
@@ -1188,6 +1528,8 @@ updateScrollSpy();
 showStreak();
 showDailyQuote();
 showNextAction();
+showTodayPlan();
+autoStartToday();
 window.addEventListener("scroll", updateScrollSpy, { passive: true });
 window.addEventListener("resize", updateScrollSpy);
 </script>
